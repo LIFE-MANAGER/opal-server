@@ -2,6 +2,7 @@ package com.lifeManager.opalyouth.entity;
 
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ import javax.persistence.*;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    @Column(name = "member_idx")
+    private Long memberIdx;
 
     @Column(name = "nickname", nullable = false, length = 25)
     private String nickname;
@@ -31,9 +33,22 @@ public class Member extends BaseEntity {
     @Column(name = "details", nullable = false)
     private String details;
 
+    // 위치 서비스 동의
     @Column(name = "location_YN", nullable = false)
     private boolean locationEnabled;
 
+    // 구독 여부
     @Column(name = "subscribe", nullable = false)
     private boolean subscriptionStatus;
+
+    @Builder
+    public Member(String nickname, String email, String password, String phoneNum, String details, boolean locationEnabled, boolean subscriptionStatus) {
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.details = details;
+        this.locationEnabled = locationEnabled;
+        this.subscriptionStatus = subscriptionStatus;
+    }
 }

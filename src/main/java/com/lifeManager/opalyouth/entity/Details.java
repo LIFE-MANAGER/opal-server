@@ -15,7 +15,8 @@ import javax.persistence.*;
 public class Details extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    @Column(name = "details_idx")
+    private Long detailsIdx;
 
     @Column(name = "sexual_taste", length = 20)
     private String sexualTaste;
