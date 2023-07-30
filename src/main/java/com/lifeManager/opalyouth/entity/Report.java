@@ -11,23 +11,23 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "member_image")
-public class Image extends BaseEntity {
+@Table(name = "report")
+public class Report extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_idx")
-    private Long imageIdx;
+    @Column(name = "report_idx")
+    private Long reportIdx;
 
-    @Column(name = "image_url", nullable = false)
-    private String url;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
     @Builder
-    public Image(String url, Member member) {
-        this.url = url;
+    public Report(String content, Member member) {
+        this.content = content;
         this.member = member;
     }
 }

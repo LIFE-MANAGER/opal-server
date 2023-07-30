@@ -16,7 +16,8 @@ import java.time.LocalDate;
 public class Birth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    @Column(name = "birth_idx")
+    private Long birthIdx;
 
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
