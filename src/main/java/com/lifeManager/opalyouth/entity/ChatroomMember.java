@@ -2,6 +2,7 @@ package com.lifeManager.opalyouth.entity;
 
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,9 +26,9 @@ public class ChatroomMember extends BaseEntity {
     @JoinColumn(name = "chatroom_idx")
     private Chatroom chatroom;
 
-    /*
-    chatroom_idx ??
-     */
-
-    // builder
+    @Builder
+    public ChatroomMember(Member member, Chatroom chatroom) {
+        this.member = member;
+        this.chatroom = chatroom;
+    }
 }
