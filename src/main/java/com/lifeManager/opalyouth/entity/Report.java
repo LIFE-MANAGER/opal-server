@@ -19,15 +19,20 @@ public class Report extends BaseEntity {
     private Long reportIdx;
 
     @Column(name = "content", nullable = false)
-    private String content;
+    private String content; // 신고 내용
 
     @ManyToOne
     @JoinColumn(name = "member_idx")
-    private Member member;
+    private Member member; //신고한 사용자
+
+    @ManyToOne
+    @JoinColumn(name = "reported_member_idx")
+    private Member reportedMember; // 신고당한 사용자
 
     @Builder
-    public Report(String content, Member member) {
+    public Report(String content, Member member, Member reportedMember) {
         this.content = content;
         this.member = member;
+        this.reportedMember = reportedMember;
     }
 }

@@ -18,16 +18,18 @@ public class Friends extends BaseEntity {
     @Column(name = "friends_idx")
     private Long friendsIdx;
 
-    @Column(name = "friend", nullable = false)
-    private Long friend;
+    @ManyToOne
+    @JoinColumn(name = "friend", nullable = false)
+    private Member friend;
 
     @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
     @Builder
-    public Friends(Long friend, Member member) {
+    public Friends(Member friend, Member member) {
         this.friend = friend;
         this.member = member;
+        member.getFriendsList().add(this);
     }
 }

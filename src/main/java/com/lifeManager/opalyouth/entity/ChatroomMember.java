@@ -30,5 +30,6 @@ public class ChatroomMember extends BaseEntity {
     public ChatroomMember(Member member, Chatroom chatroom) {
         this.member = member;
         this.chatroom = chatroom;
+        member.getChatroomMemberList().add(this);
     }
 }
