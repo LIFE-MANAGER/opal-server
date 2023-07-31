@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,6 +42,18 @@ public class Member extends BaseEntity {
     // 구독 여부
     @Column(name = "subscribe", nullable = false)
     private boolean subscriptionStatus;
+
+    // 차단한 친구 목록
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Block> blockList = new ArrayList<Block>();
+
+    // 채팅방 관련 정보 목록.
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ChatroomMember> chatroomMemberList = new ArrayList<ChatroomMember>();
+
+    // 친구 목록
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Friends> friendsList = new ArrayList<Friends>();
 
     @Builder
     public Member(String nickname, String email, String password, String phoneNum, String details, boolean locationEnabled, boolean subscriptionStatus) {
