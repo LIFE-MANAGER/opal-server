@@ -30,16 +30,24 @@ public class Details extends BaseEntity {
     @Column(name = "has_children")
     private boolean hasChildren;
 
+    @Column(name = "personality", length = 20)
+    private String personality;
+
+    @Column(name = "hobby", length = 20)
+    private String hobby;
+
     @OneToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
     @Builder
-    public Details(String sexualTaste, String relationType, boolean isMarried, boolean hasChildren, Member member) {
+    public Details(String sexualTaste, String relationType, boolean isMarried, boolean hasChildren, String personality, String hobby, Member member) {
         this.sexualTaste = sexualTaste;
         this.relationType = relationType;
         this.isMarried = isMarried;
         this.hasChildren = hasChildren;
+        this.personality = personality;
+        this.hobby = hobby;
         this.member = member;
     }
 }

@@ -32,6 +32,9 @@ public class Member extends BaseEntity {
     @Column(name = "phoneNum", nullable = false)
     private String phoneNum;
 
+    @Column(name = "job", nullable = false, length = 25)
+    private String job;
+
     @Column(name = "details", nullable = false)
     private String details;
 
@@ -56,11 +59,12 @@ public class Member extends BaseEntity {
     private List<Friends> friendsList = new ArrayList<Friends>();
 
     @Builder
-    public Member(String nickname, String email, String password, String phoneNum, String details, boolean locationEnabled, boolean subscriptionStatus) {
+    public Member(String nickname, String email, String password, String phoneNum, String job, String details, boolean locationEnabled, boolean subscriptionStatus) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
+        this.job = job;
         this.details = details;
         this.locationEnabled = locationEnabled;
         this.subscriptionStatus = subscriptionStatus;
