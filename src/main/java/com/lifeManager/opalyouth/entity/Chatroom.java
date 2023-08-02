@@ -16,8 +16,7 @@ import javax.persistence.*;
 public class Chatroom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chatroom_idx")
-    private Long chatroomIdx;
+    private Long id;
 
     @Column(name = "room_name", nullable = false, length = 25)
     private String roomName;

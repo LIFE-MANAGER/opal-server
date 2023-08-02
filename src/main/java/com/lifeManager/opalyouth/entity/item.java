@@ -1,28 +1,30 @@
 package com.lifeManager.opalyouth.entity;
 
-import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.awt.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "member_location")
-public class Location extends BaseEntity {
+@Table(name = "member_item")
+public class item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "location", nullable = false)
-    private Point location;
+    @Column(name = "diamonds")
+    private int diamonds;
+
+    @Column(name = "megaphone")
+    private int megaphone;
 
     @Builder
-    public Location(Point location) {
-        this.location = location;
+    public item(int diamonds, int megaphone) {
+        this.diamonds = diamonds;
+        this.megaphone = megaphone;
     }
 }

@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class Report extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_idx")
-    private Long reportIdx;
+    private Long id;
 
     @Column(name = "content", nullable = false)
     private String content; // 신고 내용

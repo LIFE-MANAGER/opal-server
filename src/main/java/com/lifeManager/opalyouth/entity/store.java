@@ -10,12 +10,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "store")
+public class store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_idx")
-    private Long itemIdx;
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 25)
     private String name;
@@ -24,7 +23,7 @@ public class Item {
     private int price;
 
     @Builder
-    public Item(String name, int price) {
+    public store(String name, int price) {
         this.name = name;
         this.price = price;
     }

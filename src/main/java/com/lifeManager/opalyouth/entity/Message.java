@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class Message extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "message_idx")
-    private Long messageIdx;
+    private Long id;
 
     @Column(name = "content", nullable = false)
     private String content;

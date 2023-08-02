@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class Friends extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friends_idx")
-    private Long friendsIdx;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "friend", nullable = false)

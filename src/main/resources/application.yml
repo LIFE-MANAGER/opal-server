@@ -1,22 +1,15 @@
 spring:
-  ## CHAN'S LOCAL DB
+  ## LOCAL DB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: opal_user
     url: jdbc:mysql://localhost:3306/opal_db?characterEncoding=UTF-8&serverTimezone=UTC
     password: opalDbPw1@
 
-  ## MIN JUNG'S LOCAL DB
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username:
-#    url: jdbc:mysql://localhost:3306/
-#    password:
-
   jpa:
     properties:
       hibernate:
         format_sql: 'true'
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: 'true'

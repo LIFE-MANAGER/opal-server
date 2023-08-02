@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class Block extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "block_member_idx")
-    private Long blockIdx;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "blocked_member_Idx", nullable = false)

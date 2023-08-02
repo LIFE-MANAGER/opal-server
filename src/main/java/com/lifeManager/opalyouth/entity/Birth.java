@@ -16,19 +16,13 @@ import java.time.LocalDate;
 public class Birth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "birth_idx")
-    private Long birthIdx;
+    private Long id;
 
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
 
-    @OneToOne
-    @JoinColumn(name = "member_idx")
-    private Member member;
-
     @Builder
-    public Birth(LocalDate birth, Member member) {
+    public Birth(LocalDate birth) {
         this.birth = birth;
-        this.member = member;
     }
 }
