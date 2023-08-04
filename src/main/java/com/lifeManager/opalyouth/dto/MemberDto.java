@@ -1,16 +1,19 @@
 package com.lifeManager.opalyouth.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+@NoArgsConstructor
 public class MemberDto {
-    private String nickname;
-    private String job;
-    private boolean isMarried;
-    private boolean hasChildren;
-    private String personality;
-    private String hobby;
-    private String introduction;    // 자기소개
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class ReqNickname {
+        private String nickname;
+    }
+
+//    public static class ReqBlockMember {
+//
+//    }
 }

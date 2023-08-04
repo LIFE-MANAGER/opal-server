@@ -17,7 +17,8 @@ public enum BaseResponseStatus {
     NO_AUTH(false, HttpStatus.UNAUTHORIZED.value(), "권한이 없습니다."),
     EXIST_EMAIL(false, HttpStatus.CONFLICT.value(), "이미 존재하는 회원입니다"),
     NON_EXIST_USER(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 회원입니다"),
-
+    LIMIT_NICKNAME_CHANGE(false, HttpStatus.TOO_MANY_REQUESTS.value(), "마지막 닉네임 변경일로부터 7일이 경과하지 않았습니다."),
+    EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
 
     /**
      * Server Error - 5xx 에러
