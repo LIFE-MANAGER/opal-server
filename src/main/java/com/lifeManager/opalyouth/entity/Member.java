@@ -17,11 +17,17 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String idWithProvider; // OAuth2를 이용한 로그인 시 조회할 수 있는 Id, 카카오는 KAKAO_123984 네이버는 NAVER_s1e4jds와 같은 형태로 되어있음
+
     @Column(name = "nickname", nullable = false, length = 25)
-    private String nickname;
+    private String nickname; // 회원의 닉네임
+
+    @Column(nullable = false, length = 50)
+    private String memberName; // 회원의 실명
 
     @Column(name = "email", nullable = false, length = 50)
-    private String email;
+    private String email; // 회원의 이메일
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -35,13 +41,17 @@ public class Member extends BaseEntity {
     @Column(name = "introduction", nullable = false)
     private String introduction;
 
-    // 위치 서비스 동의
+    // 위치 서비스 동의 todo : 네이티브 앱이 아닌 웹 서비스로 변경됨이 따라 위치 서비스 동의 필요가 없어짐, 개인정보동의 여부로 고치는 것 검토
     @Column(name = "location_YN", nullable = false)
     private boolean locationEnabled;
 
     // 구독 여부
     @Column(name = "subscribe", nullable = false)
     private boolean subscriptionStatus;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
 
     // 차단한 친구 목록
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
@@ -55,25 +65,27 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Friends> friendsList = new ArrayList<Friends>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_details_idx")
     private Details details;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_birth_idx")
     private Birth birth;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_location_idx")
     private Location location;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_item_idx")
     private item item;
 
     @Builder
-    public Member(String nickname, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item) {
+    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item) {
+        this.idWithProvider = idWithProvider;
         this.nickname = nickname;
+        this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
@@ -85,5 +97,10 @@ public class Member extends BaseEntity {
         this.birth = birth;
         this.location = location;
         this.item = item;
+    }
+
+    public enum Role {
+        USER,
+        ADMIN
     }
 }
