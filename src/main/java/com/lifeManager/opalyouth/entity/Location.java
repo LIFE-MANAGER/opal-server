@@ -1,13 +1,14 @@
 package com.lifeManager.opalyouth.entity;
 
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,11 +19,15 @@ public class Location extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "location", nullable = false)
-    private Point location;
+    @Column(name = "location")
+    private Point2D.Double location;
 
     @Builder
-    public Location(Point location) {
-        this.location = location;
+    public Location(@NotNull Double latitude, @NotNull Double longitude) {
+        try {
+            this.location = new Point2D.Double(latitude, longitude);
+        } catch (NullPointerException e) {
+            this.location = null;
+        }
     }
 }
