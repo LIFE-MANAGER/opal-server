@@ -3,7 +3,7 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
-import com.lifeManager.opalyouth.dto.MemberInfoResponse;
+import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
 import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
 import com.lifeManager.opalyouth.entity.*;
 import com.lifeManager.opalyouth.repository.ImageRepository;

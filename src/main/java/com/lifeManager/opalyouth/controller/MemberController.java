@@ -2,12 +2,11 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
+import com.lifeManager.opalyouth.dto.member.MemberNicknameRequest;
 import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
-import com.lifeManager.opalyouth.repository.MemberRepository;
 import org.springframework.validation.BindingResult;
 
-import com.lifeManager.opalyouth.dto.MemberDto;
-import com.lifeManager.opalyouth.dto.MemberInfoResponse;
+import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +55,7 @@ public class MemberController {
 
     // 닉네임 수정
     @PatchMapping("/nickname")
-    public BaseResponse<String> updateNickname(Principal principal, @RequestBody MemberDto.ReqNickname nickname) {
+    public BaseResponse<String> updateNickname(Principal principal, @RequestBody MemberNicknameRequest nickname) {
         try {
             memberService.updateNickname(principal, nickname.getNickname());
             return new BaseResponse<>("닉네임을 수정하였습니다.");

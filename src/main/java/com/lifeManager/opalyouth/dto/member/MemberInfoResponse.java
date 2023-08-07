@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class MemberInfoResponse {       // 마이페이지 등 Member 관련 응답 반환 시 사용
+public class MemberInfoResponse {
     private List<Image> imageList;
     private LocalDate birth;
     private String nickname;
