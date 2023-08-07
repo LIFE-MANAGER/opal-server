@@ -4,6 +4,7 @@ import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,11 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    // 닉네임 업데이트 날짜
+    @Column
+    private LocalDate nicknameUpdateAt;
+
+
 
     // 차단한 친구 목록
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
@@ -64,6 +70,11 @@ public class Member extends BaseEntity {
     // 친구 목록
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Friends> friendsList = new ArrayList<Friends>();
+
+    // 프로필 사진 목록
+    @OneToMany
+    @JoinColumn(name = "image_idx")
+    private List<Image> imageList =  new ArrayList<Image>();
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_details_idx")
