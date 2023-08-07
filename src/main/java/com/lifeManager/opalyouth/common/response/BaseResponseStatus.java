@@ -19,12 +19,16 @@ public enum BaseResponseStatus {
     NON_EXIST_USER(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 회원입니다"),
     LIMIT_NICKNAME_CHANGE(false, HttpStatus.TOO_MANY_REQUESTS.value(), "마지막 닉네임 변경일로부터 7일이 경과하지 않았습니다."),
     EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
+    INACTIVE_ACCOUNT(false, HttpStatus.BAD_REQUEST.value(), "휴면 계정입니다."),
+    WRONG_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "잘못된 비밀번호 입니다."),
+    EXPIRED_JWT_TOKEN(false, HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다"),
+    INVALID_JWT_TOKEN(false, HttpStatus.NOT_ACCEPTABLE.value(), "유효하지 않은 토큰입니다."),
 
     /**
      * Server Error - 5xx 에러
      */
-    DATABASE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 저장에 실패하였습니다.")
-    ;
+    DATABASE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 저장에 실패하였습니다."),
+    INTERNAL_SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "알 수 없는 에러가 발생하였습니다."),    ;
 
     private final boolean isSuccess;
     private final int code;

@@ -15,9 +15,6 @@ public class Details extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sexual_taste", length = 20)
-    private String sexualTaste;
-
     @Column(name = "relation_type", length = 20)
     private String relationType;
 
@@ -34,8 +31,7 @@ public class Details extends BaseEntity {
     private String hobby;
 
     @Builder
-    public Details(String sexualTaste, String relationType, boolean isMarried, boolean hasChildren, String personality, String hobby) {
-        this.sexualTaste = sexualTaste;
+    public Details(String relationType, boolean isMarried, boolean hasChildren, String personality, String hobby) {
         this.relationType = relationType;
         this.isMarried = isMarried;
         this.hasChildren = hasChildren;
