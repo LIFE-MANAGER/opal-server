@@ -3,9 +3,11 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
 import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
 import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
 import com.lifeManager.opalyouth.entity.*;
+import com.lifeManager.opalyouth.repository.BlockRepository;
 import com.lifeManager.opalyouth.repository.ImageRepository;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.entity.Details;
@@ -34,6 +36,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BlockRepository blockRepository;
 
     /**
      * 회원가입
@@ -129,18 +132,23 @@ public class MemberService {
     }
 
 
-    /*
-    // 프로필 사진 수정;;
+/*
+    // 프로필 사진 수정
     // todo: s3버킷 연동
-    public void updateProfileImage(Principal principal, String imageUrl) throws BaseException {
-        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), baseEntity.getState());
+    public void updateProfileImage(Principal principal, Long imageId, String imageUrl) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
 
         Member member = optional.get();
+
+        Image image = Image.builder()
+                .url(imageUrl)
+                .member(member)
+                .build();
     }
-    */
+*/
 
     // 닉네임 수정
     public void updateNickname(Principal principal, String nickname) throws BaseException {
@@ -217,7 +225,7 @@ public class MemberService {
     }
 
     // 차단 해제
-    public void releaseBlockedMember(Principal principal, Member blockedMember) throws BaseException {
+    public void unblockMember(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
@@ -226,20 +234,54 @@ public class MemberService {
         Member member = optional.get();
         List<Block> blockList = member.getBlockList();
 
-        Optional<Block> optionalBlock = blockList.stream()
-                .filter(block -> block.getBlockedMember().equals(blockedMember))
-                .findFirst();
-
+        Optional<Block> optionalBlock = blockRepository.findById(memberIdRequest.getId());
         if (optionalBlock.isEmpty()) {
+            throw new BaseException(NON_EXIST_USER);
+        }
+
+        blockList.removeIf(block -> block.getId().equals(memberIdRequest.getId()));
+        member.setBlockList(blockList);
+        try {
+            memberRepository.save(member);      // ?
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_INSERT_ERROR);
+        }
+    }
+
+    // 차단
+    public void setBlockMember(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
 
-        blockList.remove(optionalBlock.get());
+        Member member = optional.get();
+        List<Block> blockList = member.getBlockList();
+
+        Optional<Member> blockMemberOptional = memberRepository.findById(memberIdRequest.getId());
+        if (blockMemberOptional.isEmpty()) {
+            throw new BaseException(NON_EXIST_USER);
+        }
+
+        Member blockMember = blockMemberOptional.get();
+        boolean isAlreadyBlocked = blockList.stream()
+                .anyMatch(block -> block.getBlockedMember().equals(blockMember));
+
+        if (isAlreadyBlocked) {
+            throw new BaseException(BaseResponseStatus.ALREADY_BLOCKED);
+        }
+
+        Block block = Block.builder()
+                .blockedMember(blockMember)
+                .build();
+
+        blockList.add(block);
+
+        member.setBlockList(blockList);
         try {
-            member.setBlockList(blockList);
             memberRepository.save(member);
         } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
+            throw new BaseException(DATABASE_INSERT_ERROR);
         }
     }
 }

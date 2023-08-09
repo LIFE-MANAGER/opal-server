@@ -23,7 +23,7 @@ public enum BaseResponseStatus {
     INVALID_JWT_TOKEN(false, HttpStatus.NOT_ACCEPTABLE.value(), "유효하지 않은 토큰입니다."),
     LIMIT_NICKNAME_CHANGE(false, HttpStatus.TOO_MANY_REQUESTS.value(), "마지막 닉네임 변경일로부터 7일이 경과하지 않았습니다."),
     EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
-
+    ALREADY_BLOCKED(false, HttpStatus.CONFLICT.value(), "이미 차단한 회원입니다."),
 
     /**
      * Server Error - 5xx 에러

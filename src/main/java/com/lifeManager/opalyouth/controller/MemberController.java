@@ -2,6 +2,7 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
+import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
 import com.lifeManager.opalyouth.dto.member.MemberNicknameRequest;
 import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
 import org.springframework.validation.BindingResult;
@@ -87,5 +88,24 @@ public class MemberController {
     }
 
     // 차단 해제
+    @PatchMapping("/unblock-member")
+    public BaseResponse<String> unblockMember(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            memberService.unblockMember(principal, memberIdRequest);
+            return new BaseResponse<>("차단을 해제하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
+    // 차단
+    @PatchMapping("/block")
+    public BaseResponse<String> setBlockMember(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            memberService.setBlockMember(principal, memberIdRequest);
+            return new BaseResponse<>("차단에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
