@@ -39,7 +39,6 @@ public class MemberSignupRequest { // 회원가입 요청 Dto
     private Double longitude;
 
     private String imgUrl;
-
     @Getter
     public static class DetailsSignupRequest {
         private String relationType;

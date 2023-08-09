@@ -1,6 +1,7 @@
 package com.lifeManager.opalyouth.entity;
 
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
+import com.nimbusds.jose.shaded.json.annotate.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -93,7 +94,7 @@ public class Member extends BaseEntity {
     private item item;
 
     @Builder
-    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item) {
+    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item, LocalDate nicknameUpdateAt) {
         this.idWithProvider = idWithProvider;
         this.nickname = nickname;
         this.memberName = memberName;
@@ -108,10 +109,18 @@ public class Member extends BaseEntity {
         this.birth = birth;
         this.location = location;
         this.item = item;
+        this.nicknameUpdateAt = nicknameUpdateAt;
     }
 
     public enum Role {
         USER,
         ADMIN
+    }
+
+    public void addBlock(Block block) {
+        this.blockList.add(block);
+        if (block.getBlockedMember() != this){
+            block.setBlockedMember(this);
+        }
     }
 }

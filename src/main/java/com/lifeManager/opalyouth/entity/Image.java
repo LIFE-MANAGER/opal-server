@@ -29,4 +29,10 @@ public class Image extends BaseEntity {
         this.url = url;
         this.member = member;
     }
+
+    public void setUrl(String changedUrl) {
+        this.url = changedUrl;
+        int id = member.getImageList().indexOf(this);
+        member.getImageList().get(id).setUrl(changedUrl);
+    }
 }

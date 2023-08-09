@@ -23,7 +23,9 @@ import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +93,7 @@ public class MemberService {
                                 .build()
                 )
                 .subscriptionStatus(false)
+                .nicknameUpdateAt(LocalDate.now())
                 .build();
 
         // 회원 프로필 이미지 엔티티 생성
@@ -98,7 +101,6 @@ public class MemberService {
                 .url(memberSignupRequest.getImgUrl())
                 .member(memberEntity)
                 .build();
-
         try {
             memberRepository.save(memberEntity);
             imageRepository.save(imageEntity);
@@ -116,8 +118,10 @@ public class MemberService {
         Member member = optional.get();
         Details details = member.getDetails();
 
+        Optional<Image> image = imageRepository.findById(member.getId());
+
         MemberInfoResponse memberInfoResponse = MemberInfoResponse.builder()
-                .imageList(member.getImageList())
+                .imageUrl(image.get().getUrl())
                 .birth(member.getBirth().getBirth())
                 .nickname(member.getNickname())
                 .job(member.getJob())
@@ -132,7 +136,7 @@ public class MemberService {
     }
 
 
-/*
+
     // 프로필 사진 수정
     // todo: s3버킷 연동
     public void updateProfileImage(Principal principal, Long imageId, String imageUrl) throws BaseException {
@@ -143,12 +147,11 @@ public class MemberService {
 
         Member member = optional.get();
 
-        Image image = Image.builder()
-                .url(imageUrl)
-                .member(member)
-                .build();
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new BaseException(IMAGE_NOT_FOUND));
+        image.setUrl(imageUrl);
     }
-*/
+
 
     // 닉네임 수정
     public void updateNickname(Principal principal, String nickname) throws BaseException {
@@ -161,9 +164,13 @@ public class MemberService {
 
         // 닉네임 수정 기간 확인
         LocalDate lastUpdate = member.getNicknameUpdateAt();
-        long days = ChronoUnit.DAYS.between(lastUpdate, LocalDate.now());
+        log.info("[MEMBERSERVICE] : lastUpdate = {}", lastUpdate);
+        Period between = Period.between(LocalDate.now(), lastUpdate);
+        int amount = between.getDays();
+        log.info("[MEMBERSERVICE] : amout = {}", amount);
 
-        if (days < 7) {
+
+        if (amount < 7) {
             throw new BaseException(BaseResponseStatus.LIMIT_NICKNAME_CHANGE);
         }
 
@@ -193,6 +200,8 @@ public class MemberService {
         Member member = optional.get();
         Details details = member.getDetails();
 
+        log.info("memberId: {}", member.getId());
+
         try {
             member.setJob(memberInfoResponse.getJob());
             member.setIntroduction(memberInfoResponse.getIntroduction());
@@ -216,7 +225,9 @@ public class MemberService {
         }
 
         Member member = optional.get();
+        log.info("[MemberService] member = {}", member.getMemberName());
         List<Block> blockedMember = member.getBlockList();
+        log.info("[MemberService] blocked member = {}", blockedMember.get(0).getBlockedMember().getMemberName());
 
         if (blockedMember.isEmpty()) {
             return Collections.emptyList();
@@ -241,8 +252,13 @@ public class MemberService {
 
         blockList.removeIf(block -> block.getId().equals(memberIdRequest.getId()));
         member.setBlockList(blockList);
+
+        Block block = blockRepository.findById(member.getId())
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));       //
+
         try {
-            memberRepository.save(member);      // ?
+            blockRepository.save(block);
+            memberRepository.save(member);
         } catch (Exception e) {
             throw new BaseException(DATABASE_INSERT_ERROR);
         }
@@ -273,12 +289,14 @@ public class MemberService {
 
         Block block = Block.builder()
                 .blockedMember(blockMember)
+                .member(member)
                 .build();
 
         blockList.add(block);
 
         member.setBlockList(blockList);
         try {
+            blockRepository.save(block);
             memberRepository.save(member);
         } catch (Exception e) {
             throw new BaseException(DATABASE_INSERT_ERROR);

@@ -2,12 +2,9 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
-import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
-import com.lifeManager.opalyouth.dto.member.MemberNicknameRequest;
-import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
+import com.lifeManager.opalyouth.dto.member.*;
 import org.springframework.validation.BindingResult;
 
-import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +48,15 @@ public class MemberController {
     }
 
     // 프로필 이미지 수정
-
+    @PatchMapping("/profile-image")
+    public BaseResponse<String> updateImage(Principal principal, @RequestBody MemberImageRequest memberImageRequest) {
+        try {
+            memberService.updateProfileImage(principal, memberImageRequest.getImageId(), memberImageRequest.getImageUrl());
+            return new BaseResponse<>("이미지 수정에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
 
     // 닉네임 수정
@@ -81,6 +86,8 @@ public class MemberController {
     public BaseResponse<List<Block>> getBlockedMember(Principal principal) {
         try {
             List<Block> blockList = memberService.getBlockedInfo(principal);
+            System.out.println("kkkkkkkkkkk");
+            System.out.println("kkkk" + blockList.get(0).getBlockedMember().getMemberName());
             return new BaseResponse<>(blockList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -89,9 +96,9 @@ public class MemberController {
 
     // 차단 해제
     @PatchMapping("/unblock-member")
-    public BaseResponse<String> unblockMember(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+    public BaseResponse<String> unblockMember(Principal principal, @RequestBody MemberIdRequest memberId) {
         try {
-            memberService.unblockMember(principal, memberIdRequest);
+            memberService.unblockMember(principal, memberId);
             return new BaseResponse<>("차단을 해제하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -100,9 +107,9 @@ public class MemberController {
 
     // 차단
     @PatchMapping("/block")
-    public BaseResponse<String> setBlockMember(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+    public BaseResponse<String> setBlockMember(Principal principal, @RequestBody MemberIdRequest memberId) {
         try {
-            memberService.setBlockMember(principal, memberIdRequest);
+            memberService.setBlockMember(principal, memberId);
             return new BaseResponse<>("차단에 성공하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
