@@ -3,6 +3,7 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.dto.member.BlockedMemberResponse;
 import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
 import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
 import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
@@ -24,11 +25,10 @@ import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,6 +55,12 @@ public class MemberService {
             // 2번 경우
             throw new BaseException(INACTIVE_ACCOUNT);
         }
+        // 닉네임 중복 확인
+        List<Member> findMembers = this.memberRepository.findByNickname(memberSignupRequest.getNickname());
+        if (!findMembers.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.EXIST_NICKNAME);
+        }
+
         // signUp을 기본 회원가입으로 할 시 LOCAL로 저장함
         String idWithProvider;
         if (memberSignupRequest.getIdWithProvider() == null) {
@@ -139,17 +145,16 @@ public class MemberService {
 
     // 프로필 사진 수정
     // todo: s3버킷 연동
-    public void updateProfileImage(Principal principal, Long imageId, String imageUrl) throws BaseException {
+    public void updateProfileImage(Principal principal, String imageUrl) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
 
         Member member = optional.get();
+        Image memberImage = member.getImage();
 
-        Image image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new BaseException(IMAGE_NOT_FOUND));
-        image.setUrl(imageUrl);
+        memberImage.updateUrl(imageUrl);
     }
 
 
@@ -218,7 +223,7 @@ public class MemberService {
 
     
     // 차단 친구 반환
-    public List<Block> getBlockedInfo(Principal principal) throws BaseException {
+    public List<BlockedMemberResponse> getBlockedInfo(Principal principal) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
@@ -226,13 +231,16 @@ public class MemberService {
 
         Member member = optional.get();
         log.info("[MemberService] member = {}", member.getMemberName());
-        List<Block> blockedMember = member.getBlockList();
-        log.info("[MemberService] blocked member = {}", blockedMember.get(0).getBlockedMember().getMemberName());
+        List<Block> blockEntityList = member.getBlockList();
+        log.info("[MemberService] blocked member = {}", blockEntityList.get(0).getBlockedMember().getMemberName());
+        List<BlockedMemberResponse> blockResponseList = blockEntityList.stream()
+                .map(BlockedMemberResponse::BlockEntityToBlockRes)
+                .collect(Collectors.toList());
 
-        if (blockedMember.isEmpty()) {
+        if (blockEntityList.isEmpty()) {
             return Collections.emptyList();
         }
-        return blockedMember;
+        return blockResponseList;
     }
 
     // 차단 해제
@@ -241,23 +249,24 @@ public class MemberService {
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
-
-        Member member = optional.get();
-        List<Block> blockList = member.getBlockList();
-
         Optional<Block> optionalBlock = blockRepository.findById(memberIdRequest.getId());
         if (optionalBlock.isEmpty()) {
             throw new BaseException(NON_EXIST_USER);
         }
 
+        Member member = optional.get();
+        List<Block> blockList = member.getBlockList();
+
+        log.info("Block List Before Remove : {}", blockList);
         blockList.removeIf(block -> block.getId().equals(memberIdRequest.getId()));
+        log.info("Block List After Remove : {}", blockList);
         member.setBlockList(blockList);
 
         Block block = blockRepository.findById(member.getId())
                 .orElseThrow(()-> new BaseException(NON_EXIST_USER));       //
 
         try {
-            blockRepository.save(block);
+            blockRepository.delete(block);
             memberRepository.save(member);
         } catch (Exception e) {
             throw new BaseException(DATABASE_INSERT_ERROR);
@@ -271,30 +280,34 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
 
-        Member member = optional.get();
-        List<Block> blockList = member.getBlockList();
-
         Optional<Member> blockMemberOptional = memberRepository.findById(memberIdRequest.getId());
         if (blockMemberOptional.isEmpty()) {
             throw new BaseException(NON_EXIST_USER);
         }
 
-        Member blockMember = blockMemberOptional.get();
+        Member member = optional.get();
+        Member wantToBlock = blockMemberOptional.get();
+
+        List<Block> blockList = member.getBlockList();
+
         boolean isAlreadyBlocked = blockList.stream()
-                .anyMatch(block -> block.getBlockedMember().equals(blockMember));
+                .anyMatch(block -> block.getBlockedMember().equals(wantToBlock));
 
         if (isAlreadyBlocked) {
             throw new BaseException(BaseResponseStatus.ALREADY_BLOCKED);
         }
 
         Block block = Block.builder()
-                .blockedMember(blockMember)
+                .blockedMember(wantToBlock)
                 .member(member)
                 .build();
 
         blockList.add(block);
-
+        log.info("Member Block List Setter Before : {}", member.getBlockList());
         member.setBlockList(blockList);
+
+        log.info("Member Block List Setter After : {}", member.getBlockList());
+
         try {
             blockRepository.save(block);
             memberRepository.save(member);

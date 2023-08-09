@@ -5,7 +5,6 @@ import com.lifeManager.opalyouth.common.response.BaseResponse;
 import com.lifeManager.opalyouth.dto.member.*;
 import org.springframework.validation.BindingResult;
 
-import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +50,7 @@ public class MemberController {
     @PatchMapping("/profile-image")
     public BaseResponse<String> updateImage(Principal principal, @RequestBody MemberImageRequest memberImageRequest) {
         try {
-            memberService.updateProfileImage(principal, memberImageRequest.getImageId(), memberImageRequest.getImageUrl());
+            memberService.updateProfileImage(principal, memberImageRequest.getImageUrl());
             return new BaseResponse<>("이미지 수정에 성공하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -83,11 +82,9 @@ public class MemberController {
 
     // 차단목록 반환
     @GetMapping("/blocked-member")
-    public BaseResponse<List<Block>> getBlockedMember(Principal principal) {
+    public BaseResponse<List<BlockedMemberResponse>> getBlockedMember(Principal principal) {
         try {
-            List<Block> blockList = memberService.getBlockedInfo(principal);
-            System.out.println("kkkkkkkkkkk");
-            System.out.println("kkkk" + blockList.get(0).getBlockedMember().getMemberName());
+            List<BlockedMemberResponse> blockList = memberService.getBlockedInfo(principal);
             return new BaseResponse<>(blockList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());

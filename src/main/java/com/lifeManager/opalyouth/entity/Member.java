@@ -1,5 +1,6 @@
 package com.lifeManager.opalyouth.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.nimbusds.jose.shaded.json.annotate.JsonIgnore;
 import lombok.*;
@@ -61,21 +62,25 @@ public class Member extends BaseEntity {
 
 
     // 차단한 친구 목록
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Block> blockList = new ArrayList<Block>();
 
     // 채팅방 관련 정보 목록.
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<ChatroomMember> chatroomMemberList = new ArrayList<ChatroomMember>();
 
     // 친구 목록
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Friends> friendsList = new ArrayList<Friends>();
 
     // 프로필 사진 목록
-    @OneToMany
-    @JoinColumn(name = "image_idx")
-    private List<Image> imageList =  new ArrayList<Image>();
+    @Setter
+    @JsonBackReference
+    @OneToOne(mappedBy = "member")
+    private Image image;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_details_idx")
