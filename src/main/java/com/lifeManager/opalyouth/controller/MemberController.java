@@ -71,9 +71,9 @@ public class MemberController {
 
     // 프로필 수정
     @PatchMapping("/profile")
-    public BaseResponse<String> updateProfile(Principal principal, @RequestBody MemberInfoResponse memberInfoResponse) {
+    public BaseResponse<String> updateProfile(Principal principal, @RequestBody MemberProfileInfoRequest memberProfileInfoRequest) {
         try {
-            memberService.updateProfile(principal, memberInfoResponse);
+            memberService.updateProfile(principal, memberProfileInfoRequest);
             return new BaseResponse<>("프로필을 수정하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -108,6 +108,17 @@ public class MemberController {
         try {
             memberService.setBlockMember(principal, memberId);
             return new BaseResponse<>("차단에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    // 친구 요청
+    @PostMapping("/request-friend")
+    public BaseResponse<String> requestFriend(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            memberService.requestFriend(principal, memberIdRequest);
+            return new BaseResponse<>("친구 요청에 성공하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

@@ -3,12 +3,10 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
-import com.lifeManager.opalyouth.dto.member.BlockedMemberResponse;
-import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
-import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
-import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
+import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
 import com.lifeManager.opalyouth.repository.BlockRepository;
+import com.lifeManager.opalyouth.repository.FriendRequestRepository;
 import com.lifeManager.opalyouth.repository.ImageRepository;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.entity.Details;
@@ -39,6 +37,7 @@ public class MemberService {
     private final ImageRepository imageRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final BlockRepository blockRepository;
+    private final FriendRequestRepository friendRequestRepository;
 
     /**
      * 회원가입
@@ -127,7 +126,7 @@ public class MemberService {
         Optional<Image> image = imageRepository.findById(member.getId());
 
         MemberInfoResponse memberInfoResponse = MemberInfoResponse.builder()
-                .imageUrl(image.get().getUrl())
+                .image(member.getImage())
                 .birth(member.getBirth().getBirth())
                 .nickname(member.getNickname())
                 .job(member.getJob())
@@ -196,7 +195,7 @@ public class MemberService {
 
 
     // 직업, 결혼/자녀 유무, 성격, 취미, 취향(?), 자기소개 수정
-    public void updateProfile(Principal principal, MemberInfoResponse memberInfoResponse) throws BaseException {
+    public void updateProfile(Principal principal, MemberProfileInfoRequest memberProfileInfoRequest) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
@@ -208,12 +207,12 @@ public class MemberService {
         log.info("memberId: {}", member.getId());
 
         try {
-            member.setJob(memberInfoResponse.getJob());
-            member.setIntroduction(memberInfoResponse.getIntroduction());
-            details.setMarried(memberInfoResponse.isMarried());
-            details.setHasChildren(memberInfoResponse.isHasChildren());
-            details.setPersonality(memberInfoResponse.getPersonality());
-            details.setHobby(memberInfoResponse.getHobby());
+            member.setJob(memberProfileInfoRequest.getJob());
+            member.setIntroduction(memberProfileInfoRequest.getIntroduction());
+            details.setMarried(memberProfileInfoRequest.isMarried());
+            details.setHasChildren(memberProfileInfoRequest.isHasChildren());
+            details.setPersonality(memberProfileInfoRequest.getPersonality());
+            details.setHobby(memberProfileInfoRequest.getHobby());
 
             memberRepository.save(member);
         } catch (Exception e) {
@@ -256,6 +255,7 @@ public class MemberService {
 
         Member member = optional.get();
         List<Block> blockList = member.getBlockList();
+        log.info("MEMBER : {}", member.getMemberName());
 
         log.info("Block List Before Remove : {}", blockList);
         blockList.removeIf(block -> block.getId().equals(memberIdRequest.getId()));
@@ -315,4 +315,65 @@ public class MemberService {
             throw new BaseException(DATABASE_INSERT_ERROR);
         }
     }
+
+    // 친구 요청하기 기능
+    public void requestFriend(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
+
+        // optionalMember: 요청 받은 사람
+        Optional<Member> optionalMember = memberRepository.findById(memberIdRequest.getId());
+        if (optionalMember.isEmpty()) {
+            throw new BaseException(NON_EXIST_USER);
+        }
+
+        Member member = optional.get();
+        Member requestedMember = optionalMember.get();      // 요청 받은 사람
+
+        List<FriendRequest> friendRequestList = requestedMember.getFriendRequestList();
+
+        boolean isAlreadyRequest = friendRequestList.stream()
+                .anyMatch(request -> request.getRequestedMember().getId().equals(member.getId()));
+
+        FriendRequest friendRequest = FriendRequest.builder()
+                .requestedMember(requestedMember)
+                .member(member)
+                .build();
+
+        /**
+         * 내 id가 requestedMember의 FriendRequest에 있는 경우
+         * - 친구목록(Friends)에 추가
+         * - FriendRequest에서 나 삭제
+         */
+        if (isAlreadyRequest) {
+            member.addFriends(requestedMember);
+            requestedMember.addFriends(member);
+
+            try {
+                friendRequestList.removeIf(request -> request.getId().equals(memberIdRequest.getId()));
+                friendRequestRepository.delete(friendRequest);
+            } catch (Exception e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
+
+        /**
+         * 내 id가 requestedMember의 FriendRequest에 없는 경우
+         * - FriendRequest에 나 추가
+         */
+        else {
+            try {
+                friendRequestList.add(friendRequest);
+                friendRequestRepository.save(friendRequest);
+                log.info("FriendRequest Name: {}", friendRequest.getMember().getMemberName());
+            } catch (Exception e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
+    }
+
+    // 친구목록
+
 }

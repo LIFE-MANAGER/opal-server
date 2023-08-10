@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class MemberInfoResponse {
-    private String imageUrl;
+    private Image image;
     private LocalDate birth;
     private String nickname;
     private String job;
