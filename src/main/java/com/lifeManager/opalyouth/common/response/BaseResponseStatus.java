@@ -10,6 +10,7 @@ public enum BaseResponseStatus {
      * 코드의 원활한 이해을 위해 code는 숫자가 아닌 아래 형태로 입력해주세요.
      */
     SUCCESS(true, HttpStatus.OK.value(), "요청에 성공하였습니다."),
+    MATCH(true, HttpStatus.ACCEPTED.value(), "친구 목록에 추가되었습니다."),
 
     /**
      * Client Error - 4xx 에러
@@ -25,6 +26,7 @@ public enum BaseResponseStatus {
     EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
     ALREADY_BLOCKED(false, HttpStatus.CONFLICT.value(), "이미 차단한 회원입니다."),
     IMAGE_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 이미지입니다."),
+    ALREADY_REQUESTED(false, HttpStatus.CONFLICT.value(), "이미 친구요청을 보냈습니다."),
     /**
      * Server Error - 5xx 에러
      */

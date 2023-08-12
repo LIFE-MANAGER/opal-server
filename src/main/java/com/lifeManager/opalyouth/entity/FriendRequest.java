@@ -14,17 +14,16 @@ public class FriendRequest {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_idx", nullable = false)
-    private Member member;      // 요청한 사람
+    @JoinColumn(name = "requested_member_idx", nullable = false)
+    private Member requestedMember;      // 요청 받은 사람 (나)
 
     @ManyToOne
-    @JoinColumn(name = "requested_member_idx", nullable = false)
-    private Member requestedMember;     // 요청 받은 사람
+    @JoinColumn(name = "request_member_idx", nullable = false)
+    private Member requestMember;     // 요청한 사람
 
     @Builder
-    public FriendRequest(Member member, Member requestedMember) {
-        this.member = member;
+    public FriendRequest(Member requestedMember, Member requestMember) {
         this.requestedMember = requestedMember;
-        requestedMember.getFriendRequestList().add(this);
+        this.requestMember = requestMember;
     }
 }

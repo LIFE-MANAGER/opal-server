@@ -84,7 +84,7 @@ public class Member extends BaseEntity {
 
     // 친구 요청받은 목록
     @JsonBackReference
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "requestedMember", cascade = CascadeType.REMOVE)
     private List<FriendRequest> friendRequestList = new ArrayList<FriendRequest>();
 
     @OneToOne(cascade = CascadeType.PERSIST)
@@ -137,5 +137,10 @@ public class Member extends BaseEntity {
     public void addFriends(Member member) {
         Friends friend = new Friends(member, this);
         this.friendsList.add(friend);
+    }
+
+    public void addFriendRequest(Member member) {
+        FriendRequest friendRequest = new FriendRequest(this, member);
+        this.friendRequestList.add(friendRequest);
     }
 }

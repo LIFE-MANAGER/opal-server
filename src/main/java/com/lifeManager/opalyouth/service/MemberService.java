@@ -126,7 +126,7 @@ public class MemberService {
         Optional<Image> image = imageRepository.findById(member.getId());
 
         MemberInfoResponse memberInfoResponse = MemberInfoResponse.builder()
-                .image(member.getImage())
+                .imageUrl(member.getImage().getUrl())
                 .birth(member.getBirth().getBirth())
                 .nickname(member.getNickname())
                 .job(member.getJob())
@@ -231,7 +231,6 @@ public class MemberService {
         Member member = optional.get();
         log.info("[MemberService] member = {}", member.getMemberName());
         List<Block> blockEntityList = member.getBlockList();
-        log.info("[MemberService] blocked member = {}", blockEntityList.get(0).getBlockedMember().getMemberName());
         List<BlockedMemberResponse> blockResponseList = blockEntityList.stream()
                 .map(BlockedMemberResponse::BlockEntityToBlockRes)
                 .collect(Collectors.toList());
@@ -262,8 +261,8 @@ public class MemberService {
         log.info("Block List After Remove : {}", blockList);
         member.setBlockList(blockList);
 
-        Block block = blockRepository.findById(member.getId())
-                .orElseThrow(()-> new BaseException(NON_EXIST_USER));       //
+        Block block = blockRepository.findById(memberIdRequest.getId())
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));
 
         try {
             blockRepository.delete(block);
@@ -329,51 +328,102 @@ public class MemberService {
             throw new BaseException(NON_EXIST_USER);
         }
 
-        Member member = optional.get();
+        Member requestMember = optional.get();
         Member requestedMember = optionalMember.get();      // 요청 받은 사람
 
-        List<FriendRequest> friendRequestList = requestedMember.getFriendRequestList();
+        log.info("REQUEST NAME: {}", requestMember.getMemberName());
+        log.info("REQUESTED_MEMBER NAME: {}",requestedMember.getMemberName());
 
-        boolean isAlreadyRequest = friendRequestList.stream()
-                .anyMatch(request -> request.getRequestedMember().getId().equals(member.getId()));
+        List<FriendRequest> memberFriendRequestList = requestMember.getFriendRequestList();        // member가 요청받은 목록
+        List<FriendRequest> friendRequestList = requestedMember.getFriendRequestList();     // requestedMember(상대)가 요청받은 목록
+
+
+        // 같은 상대에게 이미 요청을 한 경우 (중복)
+        boolean isAlreadyRequest = false;
+        for (FriendRequest friendRequest : friendRequestList) {
+            if (friendRequest.getRequestedMember().getId() == requestedMember.getId()) {
+                log.info("[IS ALREADY REQUEST] MemberID: {}", requestMember.getId());
+                log.info("[IS ALREADY REQUEST] RequestedMemberID: {}", requestedMember.getId());
+                isAlreadyRequest = true;
+                break;
+            }
+        }
+
+        if (isAlreadyRequest) {
+            throw new BaseException(ALREADY_REQUESTED);
+        }
+
+
+        // 내 친구요청 목록에 requestedMember의 id가 들어있을 때
+        boolean bothFriendRequest = false;
+        for(FriendRequest friendRequest : memberFriendRequestList) {
+            if (friendRequest.getRequestMember().getId() == requestedMember.getId()) {
+                bothFriendRequest = true;
+                log.info("[BOTH FRIEND REQUEST] MemberID: {}", requestMember.getId());
+                log.info("[BOTH FRIEND REQUEST] RequestedMemberID: {}", requestedMember.getId());
+                break;
+            }
+        }
 
         FriendRequest friendRequest = FriendRequest.builder()
                 .requestedMember(requestedMember)
-                .member(member)
+                .requestMember(requestMember)
                 .build();
+
+
+        /**
+         * 내 id가 requestedMember의 FriendRequest에 없는 경우
+         * - FriendRequest에 나 추가
+         */
+        if (!bothFriendRequest) {
+            try {
+                requestMember.addFriendRequest(requestedMember);
+                requestedMember.addFriendRequest(requestMember);
+                friendRequestRepository.save(friendRequest);
+                log.info("!bothFriendRequest");
+            } catch (Exception e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
 
         /**
          * 내 id가 requestedMember의 FriendRequest에 있는 경우
          * - 친구목록(Friends)에 추가
          * - FriendRequest에서 나 삭제
          */
-        if (isAlreadyRequest) {
-            member.addFriends(requestedMember);
-            requestedMember.addFriends(member);
-
-            try {
-                friendRequestList.removeIf(request -> request.getId().equals(memberIdRequest.getId()));
-                friendRequestRepository.delete(friendRequest);
-            } catch (Exception e) {
-                throw new BaseException(DATABASE_INSERT_ERROR);
-            }
-        }
-
-        /**
-         * 내 id가 requestedMember의 FriendRequest에 없는 경우
-         * - FriendRequest에 나 추가
-         */
         else {
+            requestMember.addFriends(requestedMember);
+            requestedMember.addFriends(requestMember);
+
             try {
-                friendRequestList.add(friendRequest);
-                friendRequestRepository.save(friendRequest);
-                log.info("FriendRequest Name: {}", friendRequest.getMember().getMemberName());
+                memberFriendRequestList.removeIf(request -> request.getRequestMember().getId().equals(memberIdRequest.getId()));
+                friendRequestRepository.delete(friendRequest);
+                memberRepository.save(requestMember);
+                memberRepository.save(requestedMember);
             } catch (Exception e) {
                 throw new BaseException(DATABASE_INSERT_ERROR);
             }
+
+            throw new BaseException(MATCH);
         }
     }
 
     // 친구목록
+    public List<FriendInfoResponse> getFriendsInfo(Principal principal) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
 
+        Member member = optional.get();
+
+        List<Friends> friendsEntityList = member.getFriendsList();
+        List<FriendInfoResponse> friendInfoResponseList = friendsEntityList.stream()
+                .map(FriendInfoResponse::FriendEntityToFriendRes).collect(Collectors.toList());
+
+        if (friendsEntityList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return friendInfoResponseList;
+    }
 }

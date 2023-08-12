@@ -123,4 +123,15 @@ public class MemberController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    // 친구 목록
+    @GetMapping("/friends")
+    public BaseResponse<List<FriendInfoResponse>> getFriendsInfo(Principal principal) {
+        try {
+            List<FriendInfoResponse> friendInfoResponseList = memberService.getFriendsInfo(principal);
+            return new BaseResponse<>(friendInfoResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
