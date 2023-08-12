@@ -15,6 +15,9 @@ public class Details extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne(mappedBy = "details")
+    private Member member;
+
     @Column(name = "relation_type", length = 20)
     private String relationType;
 

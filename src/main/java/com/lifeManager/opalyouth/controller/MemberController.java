@@ -103,7 +103,7 @@ public class MemberController {
     }
 
     // 차단
-    @PatchMapping("/block")
+    @PostMapping("/block")
     public BaseResponse<String> setBlockMember(Principal principal, @RequestBody MemberIdRequest memberId) {
         try {
             memberService.setBlockMember(principal, memberId);
