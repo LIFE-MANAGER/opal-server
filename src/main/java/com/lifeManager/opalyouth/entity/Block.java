@@ -40,7 +40,6 @@ public class Block extends BaseEntity {
     public void setBlockedMember(Member blockedMember) {
         this.blockedMember = blockedMember;
         member.getBlockList().add(this);
-
     }
 
     /**

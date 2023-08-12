@@ -1,15 +1,9 @@
 package com.lifeManager.opalyouth.dto.member;
 
-import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
-@Builder
-public class MemberInfoResponse {
-    private String imageUrl;
-    private LocalDate birth;
+public class MemberInfoRequest {
     private String nickname;
     private String job;
     private boolean isMarried;
@@ -19,5 +13,4 @@ public class MemberInfoResponse {
     private String introduction;    // 자기소개
     private Double latitude;
     private Double longitude;
-    private int blockMemberNumber;
 }

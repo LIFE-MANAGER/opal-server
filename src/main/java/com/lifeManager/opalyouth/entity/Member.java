@@ -87,7 +87,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "requestedMember", cascade = CascadeType.REMOVE)
     private List<FriendRequest> friendRequestList = new ArrayList<FriendRequest>();
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_details_idx")
     private Details details;
 
@@ -96,6 +96,7 @@ public class Member extends BaseEntity {
     private Birth birth;
 
     @OneToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
     @JoinColumn(name = "member_location_idx")
     private Location location;
 

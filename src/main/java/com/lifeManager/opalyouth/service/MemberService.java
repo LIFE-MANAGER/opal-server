@@ -9,6 +9,9 @@ import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
+import com.lifeManager.opalyouth.repository.MemberRepository;
+import com.lifeManager.opalyouth.repository.TodaysFriendsRepository;
+import com.lifeManager.opalyouth.utils.RefreshRecommendUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +25,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,6 +40,8 @@ public class MemberService {
     private final BlockRepository blockRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final FriendRepository friendRepository;
+    private final RefreshRecommendUtils refreshRecommendUtils;
+    private final TodaysFriendsRepository todaysFriendsRepository;
 
     /**
      * 회원가입
@@ -90,10 +96,7 @@ public class MemberService {
                                 .build()
                 )
                 .location(
-                        Location.builder()
-                                .latitude(memberSignupRequest.getLatitude())
-                                .longitude(memberSignupRequest.getLongitude())
-                                .build()
+                        new Location(memberSignupRequest.getLatitude(), memberSignupRequest.getLongitude())
                 )
                 .subscriptionStatus(false)
                 .nicknameUpdateAt(LocalDate.now())
@@ -104,9 +107,35 @@ public class MemberService {
                 .url(memberSignupRequest.getImgUrl())
                 .member(memberEntity)
                 .build();
+
+        // 회원가입 시 오늘의 친구 생성 부분.
+        Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(memberEntity.getDetails().getPersonality());
+        log.info("RECOMMENDED BY PERSONAL : {}", recommendByPersonality.getMemberName());
+
+        Member recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+        log.info("RECOMMENDED BY Rel : {}", recommendByRelationType.getMemberName());
+        while (
+                Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
+        ) {
+            recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+        }
+
+
+        Member recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+        log.info("RECOMMENDED BY Ho : {}", recommendByHobby.getMemberName());
+        while (
+                Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
+                        || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
+        ) {
+            recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+        }
+
+        TodaysFriends todaysFriends = new TodaysFriends(memberEntity, recommendByPersonality, recommendByRelationType, recommendByHobby);
+
         try {
             memberRepository.save(memberEntity);
             imageRepository.save(imageEntity);
+            todaysFriendsRepository.save(todaysFriends);
         } catch (Exception e) {
             throw new BaseException(DATABASE_INSERT_ERROR);
         }
@@ -121,7 +150,6 @@ public class MemberService {
         Member member = optional.get();
         Details details = member.getDetails();
 
-        Optional<Image> image = imageRepository.findById(member.getId());
 
         MemberInfoResponse memberInfoResponse = MemberInfoResponse.builder()
                 .imageUrl(member.getImage().getUrl())
@@ -133,6 +161,9 @@ public class MemberService {
                 .hasChildren(details.isHasChildren())
                 .personality(details.getPersonality())
                 .hobby(details.getHobby())
+                .latitude(member.getLocation().getLatitude())
+                .longitude(member.getLocation().getLongitude())
+                .blockMemberNumber(member.getBlockList().size())
                 .build();
 
         return memberInfoResponse;
@@ -245,22 +276,21 @@ public class MemberService {
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
-        Optional<Block> optionalBlock = blockRepository.findById(memberIdRequest.getId());
+        Optional<Member> optionalBlock = memberRepository.findById(memberIdRequest.getId());
         if (optionalBlock.isEmpty()) {
             throw new BaseException(NON_EXIST_USER);
         }
 
         Member member = optional.get();
         List<Block> blockList = member.getBlockList();
-        log.info("MEMBER : {}", member.getMemberName());
 
         log.info("Block List Before Remove : {}", blockList);
-        blockList.removeIf(block -> block.getId().equals(memberIdRequest.getId()));
+        blockList.removeIf(block -> block.getBlockedMember().getId().equals(memberIdRequest.getId()));
         log.info("Block List After Remove : {}", blockList);
         member.setBlockList(blockList);
 
-        Block block = blockRepository.findById(memberIdRequest.getId())
-                .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+        Block block = blockRepository.findByMemberAndBlockedMember(member, optionalBlock.get())
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));       // todo : Exception 이름 바꾸기
 
         try {
             blockRepository.delete(block);
