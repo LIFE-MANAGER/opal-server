@@ -1,6 +1,5 @@
 package com.lifeManager.opalyouth.dto.member;
 
-import com.lifeManager.opalyouth.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
 

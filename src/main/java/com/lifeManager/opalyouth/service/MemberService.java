@@ -3,13 +3,9 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
-import com.lifeManager.opalyouth.dto.member.BlockedMemberResponse;
-import com.lifeManager.opalyouth.dto.member.MemberIdRequest;
-import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
-import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
+import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
-import com.lifeManager.opalyouth.repository.BlockRepository;
-import com.lifeManager.opalyouth.repository.ImageRepository;
+import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
@@ -42,6 +38,8 @@ public class MemberService {
     private final ImageRepository imageRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final BlockRepository blockRepository;
+    private final FriendRequestRepository friendRequestRepository;
+    private final FriendRepository friendRepository;
     private final RefreshRecommendUtils refreshRecommendUtils;
     private final TodaysFriendsRepository todaysFriendsRepository;
 
@@ -226,7 +224,7 @@ public class MemberService {
 
 
     // 직업, 결혼/자녀 유무, 성격, 취미, 취향(?), 자기소개 수정
-    public void updateProfile(Principal principal, MemberInfoResponse memberInfoResponse) throws BaseException {
+    public void updateProfile(Principal principal, MemberProfileInfoRequest memberProfileInfoRequest) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
@@ -238,12 +236,12 @@ public class MemberService {
         log.info("memberId: {}", member.getId());
 
         try {
-            member.setJob(memberInfoResponse.getJob());
-            member.setIntroduction(memberInfoResponse.getIntroduction());
-            details.setMarried(memberInfoResponse.isMarried());
-            details.setHasChildren(memberInfoResponse.isHasChildren());
-            details.setPersonality(memberInfoResponse.getPersonality());
-            details.setHobby(memberInfoResponse.getHobby());
+            member.setJob(memberProfileInfoRequest.getJob());
+            member.setIntroduction(memberProfileInfoRequest.getIntroduction());
+            details.setMarried(memberProfileInfoRequest.isMarried());
+            details.setHasChildren(memberProfileInfoRequest.isHasChildren());
+            details.setPersonality(memberProfileInfoRequest.getPersonality());
+            details.setHobby(memberProfileInfoRequest.getHobby());
 
             memberRepository.save(member);
         } catch (Exception e) {
@@ -343,5 +341,122 @@ public class MemberService {
         } catch (Exception e) {
             throw new BaseException(DATABASE_INSERT_ERROR);
         }
+    }
+
+    // 친구 요청하기 기능
+    public void requestFriend(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
+
+        Optional<Member> optionalMember = memberRepository.findById(memberIdRequest.getId());
+        if (optionalMember.isEmpty()) {
+            throw new BaseException(NON_EXIST_USER);
+        }
+
+        Member requestMember = optional.get();      // 요청한 사람
+        Member requestedMember = optionalMember.get();      // 요청받은 사람
+
+        List<FriendRequest> memberFriendRequestList = requestMember.getFriendRequestList();        // member가 친구 요청받은 목록
+        List<FriendRequest> friendRequestList = requestedMember.getFriendRequestList();     // requestedMember(상대)가 요청받은 목록
+
+
+        // 같은 상대에게 이미 요청을 한 경우 (중복)
+        boolean isAlreadyRequest = false;
+        for (FriendRequest friendRequest : friendRequestList) {
+            if (friendRequest.getRequestedMember().getId() == requestedMember.getId()) {
+                log.info("[IS ALREADY REQUEST] MemberID: {}", requestMember.getId());
+                log.info("[IS ALREADY REQUEST] RequestedMemberID: {}", requestedMember.getId());
+                isAlreadyRequest = true;
+                break;
+            }
+        }
+        if (isAlreadyRequest) {
+            throw new BaseException(ALREADY_REQUESTED);
+        }
+
+
+        // 이미 상대가 나에게 요청을 보냈었는지 확인
+        boolean bothFriendRequest = false;
+        for(FriendRequest friendRequest : memberFriendRequestList) {
+            if (friendRequest.getRequestMember().getId() == requestedMember.getId()) {
+                bothFriendRequest = true;
+                log.info("[BOTH FRIEND REQUEST] MemberID: {}", requestMember.getId());
+                log.info("[BOTH FRIEND REQUEST] RequestedMemberID: {}", requestedMember.getId());
+                break;
+            }
+        }
+
+        FriendRequest friendRequest = FriendRequest.builder()
+                .requestedMember(requestedMember)
+                .requestMember(requestMember)
+                .build();
+
+
+        /**
+         * 내 id가 requestedMember의 FriendRequest에 없는 경우
+         * - FriendRequest에 나 추가
+         */
+        if (!bothFriendRequest) {
+            try {
+                requestMember.addFriendRequest(requestedMember);
+                requestedMember.addFriendRequest(requestMember);
+                friendRequestRepository.save(friendRequest);
+            } catch (Exception e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
+
+        /**
+         * 이미 상대가 나에게 요청을 보낸 경우
+         * - 서로 친구목록(Friends)에 추가
+         * - FriendRequest에서 전에 왔던 request 삭제
+         */
+        else {
+            Friends requestMemberFriend = new Friends(requestedMember, requestMember);
+            Friends requestedMemberFriend = new Friends(requestMember, requestedMember);
+
+            log.info("FRIEND: {}", requestMemberFriend.getMember().getMemberName());
+            log.info("FRIEND: {}", requestedMemberFriend.getMember().getMemberName());
+
+            requestMember.addFriends(requestMemberFriend);
+            requestedMember.addFriends(requestedMemberFriend);
+
+            // 전에 상대방한테서 온 request 찾아서 findRequest에 저장
+            FriendRequest findRequest = friendRequestRepository.findByRequestedMemberAndRequestMember(requestMember, requestedMember)
+                    .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+
+            try {
+                // 친구 목록에 저장
+                friendRepository.save(requestMemberFriend);
+                friendRepository.save(requestedMemberFriend);
+
+                memberFriendRequestList.removeIf(request -> request.getRequestMember().getId().equals(memberIdRequest.getId()));
+                friendRequestRepository.delete(findRequest);
+
+            } catch (Exception e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
+    }
+
+    // 친구목록
+    public List<FriendInfoResponse> getFriendsInfo(Principal principal) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
+
+        Member member = optional.get();
+
+        List<Friends> friendsEntityList = member.getFriendsList();
+        List<FriendInfoResponse> friendInfoResponseList = friendsEntityList.stream()
+                .map(FriendInfoResponse::FriendEntityToFriendRes).collect(Collectors.toList());
+
+        if (friendsEntityList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return friendInfoResponseList;
     }
 }

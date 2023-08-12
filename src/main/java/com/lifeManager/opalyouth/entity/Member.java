@@ -82,6 +82,11 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member")
     private Image image;
 
+    // 친구 요청받은 목록
+    @JsonBackReference
+    @OneToMany(mappedBy = "requestedMember", cascade = CascadeType.REMOVE)
+    private List<FriendRequest> friendRequestList = new ArrayList<FriendRequest>();
+
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_details_idx")
     private Details details;
@@ -128,5 +133,14 @@ public class Member extends BaseEntity {
         if (block.getBlockedMember() != this){
             block.setBlockedMember(this);
         }
+    }
+
+    public void addFriends(Friends friend) {
+        this.friendsList.add(friend);
+    }
+
+    public void addFriendRequest(Member member) {
+        FriendRequest friendRequest = new FriendRequest(this, member);
+        this.friendRequestList.add(friendRequest);
     }
 }
