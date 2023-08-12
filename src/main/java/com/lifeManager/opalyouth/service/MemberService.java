@@ -5,13 +5,10 @@ import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
 import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
-import com.lifeManager.opalyouth.repository.BlockRepository;
-import com.lifeManager.opalyouth.repository.FriendRequestRepository;
-import com.lifeManager.opalyouth.repository.ImageRepository;
+import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
-import com.lifeManager.opalyouth.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +35,7 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final BlockRepository blockRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final FriendRepository friendRepository;
 
     /**
      * 회원가입
@@ -322,19 +320,15 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
         }
 
-        // optionalMember: 요청 받은 사람
         Optional<Member> optionalMember = memberRepository.findById(memberIdRequest.getId());
         if (optionalMember.isEmpty()) {
             throw new BaseException(NON_EXIST_USER);
         }
 
-        Member requestMember = optional.get();
-        Member requestedMember = optionalMember.get();      // 요청 받은 사람
+        Member requestMember = optional.get();      // 요청한 사람
+        Member requestedMember = optionalMember.get();      // 요청받은 사람
 
-        log.info("REQUEST NAME: {}", requestMember.getMemberName());
-        log.info("REQUESTED_MEMBER NAME: {}",requestedMember.getMemberName());
-
-        List<FriendRequest> memberFriendRequestList = requestMember.getFriendRequestList();        // member가 요청받은 목록
+        List<FriendRequest> memberFriendRequestList = requestMember.getFriendRequestList();        // member가 친구 요청받은 목록
         List<FriendRequest> friendRequestList = requestedMember.getFriendRequestList();     // requestedMember(상대)가 요청받은 목록
 
 
@@ -348,13 +342,12 @@ public class MemberService {
                 break;
             }
         }
-
         if (isAlreadyRequest) {
             throw new BaseException(ALREADY_REQUESTED);
         }
 
 
-        // 내 친구요청 목록에 requestedMember의 id가 들어있을 때
+        // 이미 상대가 나에게 요청을 보냈었는지 확인
         boolean bothFriendRequest = false;
         for(FriendRequest friendRequest : memberFriendRequestList) {
             if (friendRequest.getRequestMember().getId() == requestedMember.getId()) {
@@ -380,31 +373,41 @@ public class MemberService {
                 requestMember.addFriendRequest(requestedMember);
                 requestedMember.addFriendRequest(requestMember);
                 friendRequestRepository.save(friendRequest);
-                log.info("!bothFriendRequest");
             } catch (Exception e) {
                 throw new BaseException(DATABASE_INSERT_ERROR);
             }
         }
 
         /**
-         * 내 id가 requestedMember의 FriendRequest에 있는 경우
-         * - 친구목록(Friends)에 추가
-         * - FriendRequest에서 나 삭제
+         * 이미 상대가 나에게 요청을 보낸 경우
+         * - 서로 친구목록(Friends)에 추가
+         * - FriendRequest에서 전에 왔던 request 삭제
          */
         else {
-            requestMember.addFriends(requestedMember);
-            requestedMember.addFriends(requestMember);
+            Friends requestMemberFriend = new Friends(requestedMember, requestMember);
+            Friends requestedMemberFriend = new Friends(requestMember, requestedMember);
+
+            log.info("FRIEND: {}", requestMemberFriend.getMember().getMemberName());
+            log.info("FRIEND: {}", requestedMemberFriend.getMember().getMemberName());
+
+            requestMember.addFriends(requestMemberFriend);
+            requestedMember.addFriends(requestedMemberFriend);
+
+            // 전에 상대방한테서 온 request 찾아서 findRequest에 저장
+            FriendRequest findRequest = friendRequestRepository.findByRequestedMemberAndRequestMember(requestMember, requestedMember)
+                    .orElseThrow(()-> new BaseException(NON_EXIST_USER));
 
             try {
+                // 친구 목록에 저장
+                friendRepository.save(requestMemberFriend);
+                friendRepository.save(requestedMemberFriend);
+
                 memberFriendRequestList.removeIf(request -> request.getRequestMember().getId().equals(memberIdRequest.getId()));
-                friendRequestRepository.delete(friendRequest);
-                memberRepository.save(requestMember);
-                memberRepository.save(requestedMember);
+                friendRequestRepository.delete(findRequest);
+
             } catch (Exception e) {
                 throw new BaseException(DATABASE_INSERT_ERROR);
             }
-
-            throw new BaseException(MATCH);
         }
     }
 

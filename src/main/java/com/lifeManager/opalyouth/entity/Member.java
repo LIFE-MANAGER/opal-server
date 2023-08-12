@@ -134,8 +134,7 @@ public class Member extends BaseEntity {
         }
     }
 
-    public void addFriends(Member member) {
-        Friends friend = new Friends(member, this);
+    public void addFriends(Friends friend) {
         this.friendsList.add(friend);
     }
 
