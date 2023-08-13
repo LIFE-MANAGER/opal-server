@@ -12,7 +12,7 @@ public class MemberInfoResponse {
     private LocalDate birth;
     private String nickname;
     private String job;
-    private boolean isMarried;
+    private String maritalStatus;
     private boolean hasChildren;
     private String personality;
     private String hobby;

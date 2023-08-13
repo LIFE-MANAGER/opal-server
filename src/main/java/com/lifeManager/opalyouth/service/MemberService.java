@@ -84,7 +84,7 @@ public class MemberService {
                 .details(
                         Details.builder()
                                 .relationType(memberSignupRequest.getDetails().getRelationType())
-                                .isMarried(memberSignupRequest.getDetails().isMarried())
+                                .maritalStatus(Details.stringToMaritalStatus(memberSignupRequest.getDetails().getMaritalStatus()))
                                 .hasChildren(memberSignupRequest.getDetails().isHasChildren())
                                 .personality(memberSignupRequest.getDetails().getPersonality())
                                 .hobby(memberSignupRequest.getDetails().getHobby())
@@ -157,7 +157,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .job(member.getJob())
                 .introduction(member.getIntroduction())
-                .isMarried(details.isMarried())
+                .maritalStatus(details.getMaritalStatus().toString())
                 .hasChildren(details.isHasChildren())
                 .personality(details.getPersonality())
                 .hobby(details.getHobby())
@@ -238,7 +238,7 @@ public class MemberService {
         try {
             member.setJob(memberProfileInfoRequest.getJob());
             member.setIntroduction(memberProfileInfoRequest.getIntroduction());
-            details.setMarried(memberProfileInfoRequest.isMarried());
+            details.setMaritalStatus(Details.stringToMaritalStatus(memberProfileInfoRequest.getMaritalStatus()));
             details.setHasChildren(memberProfileInfoRequest.isHasChildren());
             details.setPersonality(memberProfileInfoRequest.getPersonality());
             details.setHobby(memberProfileInfoRequest.getHobby());

@@ -6,7 +6,7 @@ import lombok.Getter;
 public class MemberInfoRequest {
     private String nickname;
     private String job;
-    private boolean isMarried;
+    private String maritalStatus;
     private boolean hasChildren;
     private String personality;
     private String hobby;

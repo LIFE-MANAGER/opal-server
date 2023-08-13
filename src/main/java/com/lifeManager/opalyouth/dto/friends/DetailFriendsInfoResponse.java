@@ -1,5 +1,6 @@
 package com.lifeManager.opalyouth.dto.friends;
 
+import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 public class DetailFriendsInfoResponse {
     private String nickname;
     private String job;
-    private boolean isMarried;
+    private String maritalStatus;
     private boolean hasChildren;
     private String personality;
     private String hobby;
@@ -21,10 +22,10 @@ public class DetailFriendsInfoResponse {
     public DetailFriendsInfoResponse() {
     }
 
-    public DetailFriendsInfoResponse(String nickname, String job, boolean isMarried, boolean hasChildren, String personality, String hobby, String relationType, String introduction, Double latitude, Double longitude) {
+    public DetailFriendsInfoResponse(String nickname, String job, String maritalStatus, boolean hasChildren, String personality, String hobby, String relationType, String introduction, Double latitude, Double longitude) {
         this.nickname = nickname;
         this.job = job;
-        this.isMarried = isMarried;
+        this.maritalStatus = maritalStatus;
         this.hasChildren = hasChildren;
         this.personality = personality;
         this.hobby = hobby;
@@ -38,7 +39,7 @@ public class DetailFriendsInfoResponse {
         return new DetailFriendsInfoResponse(
                 member.getNickname(),
                 member.getJob(),
-                member.getDetails().isMarried(),
+                member.getDetails().getMaritalStatus().toString(),
                 member.getDetails().isHasChildren(),
                 member.getDetails().getPersonality(),
                 member.getDetails().getHobby(),

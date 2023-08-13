@@ -21,8 +21,9 @@ public class Details extends BaseEntity {
     @Column(name = "relation_type", length = 20)
     private String relationType;
 
-    @Column(name = "is_married")
-    private boolean isMarried;
+    @Column(name = "marital_status")
+    @Enumerated(value = EnumType.STRING)
+    private MaritalStatus maritalStatus;
 
     @Column(name = "has_children")
     private boolean hasChildren;
@@ -34,11 +35,21 @@ public class Details extends BaseEntity {
     private String hobby;
 
     @Builder
-    public Details(String relationType, boolean isMarried, boolean hasChildren, String personality, String hobby) {
+    public Details(String relationType, MaritalStatus maritalStatus, boolean hasChildren, String personality, String hobby) {
         this.relationType = relationType;
-        this.isMarried = isMarried;
+        this.maritalStatus = maritalStatus;
         this.hasChildren = hasChildren;
         this.personality = personality;
         this.hobby = hobby;
+    }
+
+    public enum MaritalStatus {
+        MARRIED,
+        SINGLE,
+        DIVORCED
+    }
+
+    public static MaritalStatus stringToMaritalStatus(String str) {
+        return MaritalStatus.valueOf(str.toUpperCase());
     }
 }

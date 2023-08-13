@@ -1,14 +1,14 @@
-insert into member_details (created_at, state, updated_at, has_children, hobby, is_married, personality, relation_type) VALUES
-    (now(), "ACTIVE", now(), true, "basketball", true, "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", true, "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", true, "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", true, "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", true, "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", true, "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", true, "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", true, "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", true, "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", true, "activity", "friend")
+insert into member_details (created_at, state, updated_at, has_children, hobby, marital_status, personality, relation_type) VALUES
+    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
+    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
+    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
+    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
+    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
+    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
+    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
+    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
+    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
+    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend")
 ;
 
 insert into member_birth (created_at, state, updated_at, birth) VALUES

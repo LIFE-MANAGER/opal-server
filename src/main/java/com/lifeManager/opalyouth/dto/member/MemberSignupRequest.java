@@ -42,7 +42,7 @@ public class MemberSignupRequest { // 회원가입 요청 Dto
     @Getter
     public static class DetailsSignupRequest {
         private String relationType;
-        private boolean isMarried;
+        private String maritalStatus;
         private boolean hasChildren;
         private String personality;
         private String hobby;
