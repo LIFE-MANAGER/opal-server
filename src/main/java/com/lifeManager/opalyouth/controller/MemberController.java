@@ -125,7 +125,7 @@ public class MemberController {
     }
 
     // 친구 목록
-    @GetMapping("/friends")
+    @GetMapping("/friendsList")
     public BaseResponse<List<FriendInfoResponse>> getFriendsInfo(Principal principal) {
         try {
             List<FriendInfoResponse> friendInfoResponseList = memberService.getFriendsInfo(principal);

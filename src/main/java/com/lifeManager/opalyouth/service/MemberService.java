@@ -333,6 +333,14 @@ public class MemberService {
         log.info("Member Block List Setter Before : {}", member.getBlockList());
         member.setBlockList(blockList);
 
+        // 차단 시 친구 삭제 기능
+        Optional<Friends> optionalMyFriends = friendRepository.findByFriendAndMember(wantToBlock, member);
+        optionalMyFriends.ifPresent(friendRepository::delete);
+
+        Optional<Friends> optionalCounterFriends = friendRepository.findByFriendAndMember(member, wantToBlock);
+        optionalCounterFriends.ifPresent(friendRepository::delete);
+
+
         log.info("Member Block List Setter After : {}", member.getBlockList());
 
         try {
