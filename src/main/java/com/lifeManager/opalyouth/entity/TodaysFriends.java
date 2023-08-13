@@ -34,6 +34,13 @@ public class TodaysFriends {
     public TodaysFriends() {
     }
 
+    public TodaysFriends(Member member) {
+        this.member = member;
+        this.memberByPersonality = null;
+        this.memberByRelationType = null;
+        this.memberByHobby = null;
+    }
+
     public TodaysFriends(Member member, Member memberByPersonality, Member memberByRelationType, Member memberByHobby) {
         this.member = member;
         this.memberByPersonality = memberByPersonality;

@@ -50,5 +50,4 @@ public class FriendsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
 }

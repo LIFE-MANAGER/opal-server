@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.INIT_TODAY_FRIENDS_ERROR;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -37,7 +39,13 @@ public class FriendsService {
 
         TodaysFriends todaysFriends;
         if (optionalTodaysFriends.isEmpty()) {
-            initTodaysFriends(member);
+            try {
+                initTodaysFriends(member);
+            } catch (Exception e) {
+                todaysFriends = new TodaysFriends(member);
+                todaysFriendsRepository.save(todaysFriends);
+                throw new BaseException(INIT_TODAY_FRIENDS_ERROR);
+            }
 
         } else {
             todaysFriends = optionalTodaysFriends.get();
@@ -82,7 +90,11 @@ public class FriendsService {
 
         TodaysFriends todaysFriends;
         if (optionalTodaysFriends.isEmpty()) {
-            todaysFriends = initTodaysFriends(member);
+            try {
+                todaysFriends = initTodaysFriends(member);
+            } catch (Exception e) {
+                throw new BaseException(INIT_TODAY_FRIENDS_ERROR);
+            }
         } else todaysFriends = optionalTodaysFriends.get();
 
         Member memberByPersonality = todaysFriends.getMemberByPersonality();
@@ -106,7 +118,7 @@ public class FriendsService {
     }
 
 
-    private TodaysFriends initTodaysFriends(Member member) {
+    private TodaysFriends initTodaysFriends(Member member) throws Exception {
         TodaysFriends todaysFriends;
         Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(member.getDetails().getPersonality());
 

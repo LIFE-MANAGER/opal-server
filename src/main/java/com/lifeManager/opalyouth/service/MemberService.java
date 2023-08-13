@@ -109,28 +109,31 @@ public class MemberService {
                 .build();
 
         // 회원가입 시 오늘의 친구 생성 부분.
-        Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(memberEntity.getDetails().getPersonality());
-        log.info("RECOMMENDED BY PERSONAL : {}", recommendByPersonality.getMemberName());
+        TodaysFriends todaysFriends;
 
-        Member recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
-        log.info("RECOMMENDED BY Rel : {}", recommendByRelationType.getMemberName());
-        while (
-                Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
-        ) {
-            recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+        try {
+            Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(memberEntity.getDetails().getPersonality());
+
+            Member recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+            while (
+                    Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
+            ) {
+                recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+            }
+
+
+            Member recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+            while (
+                    Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
+                            || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
+            ) {
+                recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+            }
+
+            todaysFriends = new TodaysFriends(memberEntity, recommendByPersonality, recommendByRelationType, recommendByHobby);
+        } catch (Exception e) {
+            todaysFriends = new TodaysFriends(memberEntity);
         }
-
-
-        Member recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
-        log.info("RECOMMENDED BY Ho : {}", recommendByHobby.getMemberName());
-        while (
-                Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
-                        || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
-        ) {
-            recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
-        }
-
-        TodaysFriends todaysFriends = new TodaysFriends(memberEntity, recommendByPersonality, recommendByRelationType, recommendByHobby);
 
         try {
             memberRepository.save(memberEntity);

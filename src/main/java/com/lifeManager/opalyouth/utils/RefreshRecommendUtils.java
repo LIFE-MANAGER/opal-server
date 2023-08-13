@@ -76,40 +76,45 @@ public class RefreshRecommendUtils {
     public void execute() throws Exception {
         log.info("execute start");
         final List<TodaysFriends> todaysFriendsList = todaysFriendsRepository.findAll();
-        log.info("todays friends list : {}", todaysFriendsList);
 
         for (TodaysFriends todaysFriends : todaysFriendsList) {
-
-            Member recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
-            while (Objects.equals(recommendByPersonality.getId(), todaysFriends.getId())) {
-                recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+            try {
+                updateTodayFriend(todaysFriends);
+            } catch (Exception e) {
+                log.error("오늘의 추천 새로고침 중 에러가 발생하였습니다. 새로고침 실패한 회원 Index : {}", todaysFriends.getMember().getId());
             }
-
-
-            Member recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
-            while (
-                    Objects.equals(recommendByRelationType.getId(), todaysFriends.getId())
-                    || Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
-            ) {
-                recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
-            }
-
-
-            Member recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
-            while (
-                    Objects.equals(recommendByHobby.getId(), todaysFriends.getId())
-                            || Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
-                            || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
-            ) {
-                recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
-            }
-
-            todaysFriends.updateRecommends(
-                    recommendByPersonality,
-                    recommendByRelationType,
-                    recommendByHobby
-            );
         }
-        log.info("todays friends list after tasklet : {}", todaysFriendsList);
+    }
+
+    private void updateTodayFriend(TodaysFriends todaysFriends) throws Exception {
+        Member recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+        while (Objects.equals(recommendByPersonality.getId(), todaysFriends.getId())) {
+            recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+        }
+
+
+        Member recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
+        while (
+                Objects.equals(recommendByRelationType.getId(), todaysFriends.getId())
+                || Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
+        ) {
+            recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
+        }
+
+
+        Member recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
+        while (
+                Objects.equals(recommendByHobby.getId(), todaysFriends.getId())
+                        || Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
+                        || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
+        ) {
+            recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
+        }
+
+        todaysFriends.updateRecommends(
+                recommendByPersonality,
+                recommendByRelationType,
+                recommendByHobby
+        );
     }
 }
