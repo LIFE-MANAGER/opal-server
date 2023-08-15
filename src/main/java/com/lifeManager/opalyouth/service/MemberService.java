@@ -7,11 +7,9 @@ import com.lifeManager.opalyouth.dto.member.request.MemberIdRequest;
 import com.lifeManager.opalyouth.dto.member.request.MemberProfileInfoRequest;
 import com.lifeManager.opalyouth.dto.member.request.MemberSignupRequest;
 import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
-import com.lifeManager.opalyouth.dto.member.response.FriendInfoResponse;
-import com.lifeManager.opalyouth.dto.member.response.MemberInfoResponse;
+import com.lifeManager.opalyouth.dto.member.response.*;
 import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
 import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
-import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
 import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.entity.Block;
@@ -50,6 +48,7 @@ public class MemberService {
     private final FriendRepository friendRepository;
     private final RefreshRecommendUtils refreshRecommendUtils;
     private final TodaysFriendsRepository todaysFriendsRepository;
+    private final LikeRepository likeRepository;
 
     /**
      * 회원가입
@@ -168,7 +167,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .job(member.getJob())
                 .introduction(member.getIntroduction())
-                .maritalStatus(details.getMaritalStatus().toString())
+                .maritalStatus(details.getMaritalStatus())
                 .hasChildren(details.isHasChildren())
                 .personality(details.getPersonality())
                 .hobby(details.getHobby())

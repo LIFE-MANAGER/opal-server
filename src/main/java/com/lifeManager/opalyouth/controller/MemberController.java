@@ -2,18 +2,20 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
+import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
 import com.lifeManager.opalyouth.dto.member.request.*;
 import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
-import com.lifeManager.opalyouth.dto.member.response.FriendInfoResponse;
-import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
+import com.lifeManager.opalyouth.dto.member.response.*;
 import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
 import com.lifeManager.opalyouth.dto.member.*;
 import org.springframework.validation.BindingResult;
 
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
