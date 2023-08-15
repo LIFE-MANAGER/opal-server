@@ -20,4 +20,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Boolean existsByEmailAndState(String email, BaseEntity.State state);
 
     Optional<Member> findByIdWithProviderAndState(String idWithProvider, BaseEntity.State state);
+
+    List<Member> findAllByState(BaseEntity.State state);
 }

@@ -92,6 +92,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Like> likeList = new ArrayList<Like>();
 
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "group_chat_idx")
+    private GroupChat groupChat;
+
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_details_idx")
     private Details details;

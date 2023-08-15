@@ -7,7 +7,6 @@ import com.lifeManager.opalyouth.dto.member.request.*;
 import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
 import com.lifeManager.opalyouth.dto.member.response.*;
 import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
-import com.lifeManager.opalyouth.dto.member.*;
 import org.springframework.validation.BindingResult;
 
 import com.lifeManager.opalyouth.service.MemberService;
