@@ -3,6 +3,7 @@ package com.lifeManager.opalyouth.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
+import com.lifeManager.opalyouth.dto.chat.ChatroomDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,9 +38,21 @@ public class Chatroom extends BaseEntity {
         this.roomId = roomId;
     }
 
+    public Chatroom(String roomId, RoomType type) {
+        this.roomId = roomId;
+        this.type = type;
+    }
+
+    public static Chatroom createChatroomByDto(ChatroomDto chatroomDto, RoomType roomType) {
+        return new Chatroom(
+                chatroomDto.getRoomId(),
+                roomType
+        );
+    }
+
     public enum RoomType {
         PRIVATE,
-        PUBLIC
+        GROUP
     }
 
 }

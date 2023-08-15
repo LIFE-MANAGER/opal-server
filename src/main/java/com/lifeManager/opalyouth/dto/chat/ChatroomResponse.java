@@ -24,9 +24,10 @@ public class ChatroomResponse {
     public static class ParticipantInfo {
         private Long memberId;
         private String nickname;
+        private String imageUrl;
 
         public static ParticipantInfo entityToDto(Member member) {
-            return new ParticipantInfo(member.getId(), member.getNickname());
+            return new ParticipantInfo(member.getId(), member.getNickname(), member.getImage().getUrl());
         }
     }
 
