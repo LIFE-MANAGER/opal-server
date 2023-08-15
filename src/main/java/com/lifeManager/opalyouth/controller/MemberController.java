@@ -2,6 +2,8 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
+import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
+import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
 import com.lifeManager.opalyouth.dto.member.*;
 import org.springframework.validation.BindingResult;
 
@@ -125,11 +127,34 @@ public class MemberController {
     }
 
     // 친구 목록
-    @GetMapping("/friendsList")
-    public BaseResponse<List<FriendInfoResponse>> getFriendsInfo(Principal principal) {
+    @GetMapping("/friends-list")
+    public BaseResponse<FriendsPageResponse> getFriendsInfo(Principal principal) {
         try {
-            List<FriendInfoResponse> friendInfoResponseList = memberService.getFriendsInfo(principal);
-            return new BaseResponse<>(friendInfoResponseList);
+            FriendsPageResponse friendsPageResponse = memberService.getFriendsInfo(principal);
+            return new BaseResponse<>(friendsPageResponse);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    // 호감 표시
+    @PostMapping("/like")
+    public BaseResponse<String> setLike(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            String result = memberService.setLikeButton(principal, memberIdRequest);
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    // 호감 표시 목록
+    @GetMapping("/like-list")
+    public BaseResponse<List<LikeFriendsPageResponse>> getLikeFriends(Principal principal) {
+        try {
+            List<LikeFriendsPageResponse> friendsPageResponseList = memberService.getLikeFriendsInfo(principal);
+            return new BaseResponse<>(friendsPageResponseList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

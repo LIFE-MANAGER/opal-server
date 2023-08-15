@@ -3,6 +3,8 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
+import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
 import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
 import com.lifeManager.opalyouth.repository.*;
@@ -42,6 +44,7 @@ public class MemberService {
     private final FriendRepository friendRepository;
     private final RefreshRecommendUtils refreshRecommendUtils;
     private final TodaysFriendsRepository todaysFriendsRepository;
+    private final LikeRepository likeRepository;
 
     /**
      * 회원가입
@@ -160,7 +163,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .job(member.getJob())
                 .introduction(member.getIntroduction())
-                .maritalStatus(details.getMaritalStatus().toString())
+                .maritalStatus(details.getMaritalStatus())
                 .hasChildren(details.isHasChildren())
                 .personality(details.getPersonality())
                 .hobby(details.getHobby())
@@ -237,6 +240,8 @@ public class MemberService {
         Details details = member.getDetails();
 
         log.info("memberId: {}", member.getId());
+        log.info("request job : {}" , memberProfileInfoRequest.getJob());
+        log.info("request marital status : {}" , memberProfileInfoRequest.getMaritalStatus());
 
         try {
             member.setJob(memberProfileInfoRequest.getJob());
@@ -248,6 +253,7 @@ public class MemberService {
 
             memberRepository.save(member);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
     }
@@ -453,7 +459,7 @@ public class MemberService {
     }
 
     // 친구목록
-    public List<FriendInfoResponse> getFriendsInfo(Principal principal) throws BaseException {
+    public FriendsPageResponse getFriendsInfo(Principal principal) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
         if (optional.isEmpty()) {
             throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
@@ -462,12 +468,101 @@ public class MemberService {
         Member member = optional.get();
 
         List<Friends> friendsEntityList = member.getFriendsList();
-        List<FriendInfoResponse> friendInfoResponseList = friendsEntityList.stream()
-                .map(FriendInfoResponse::FriendEntityToFriendRes).collect(Collectors.toList());
+        List<FriendsPageResponse.FriendInfoResponse> friendInfoResponseList = friendsEntityList.stream()
+                .map(FriendsPageResponse.FriendInfoResponse::FriendEntityToFriendRes).collect(Collectors.toList());
 
         if (friendsEntityList.isEmpty()) {
+            friendsEntityList = Collections.emptyList();
+        }
+
+        FriendsPageResponse friendsPageResponse = new FriendsPageResponse(member.getImage().getUrl(), member.getNickname(), member.getIntroduction(), friendInfoResponseList);
+
+        return friendsPageResponse;
+    }
+    
+    // 호감 표시
+    public String setLikeButton(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
+
+        Optional<Member> optionalMember = memberRepository.findById(memberIdRequest.getId());
+        if (optionalMember.isEmpty()) {
+            throw new BaseException(NON_EXIST_USER);
+        }
+
+        Member member = optional.get();
+        Member likedMember = optionalMember.get();      // 내가 하트 누른 상대
+
+        List<Like> likeList = member.getLikeList();
+
+        boolean isAlreadyLike = false;
+        for (Like like : likeList) {
+            if (like.getLikedMember().getId() == likedMember.getId()) {
+                isAlreadyLike = true;
+                break;
+            }
+        }
+
+        Like like = Like.builder()
+                .member(member)
+                .likedMember(likedMember)
+                .build();
+
+        /**
+         * 처음 하트 누른 경우 (!isAlreadyLike)
+         * - Like 테이블에 새로 저장
+         */
+        if (!isAlreadyLike) {
+            try {
+                member.addLikedMember(like);
+                likeRepository.save(like);
+
+                return "상대방에게 호감 표시를 했습니다.";
+            } catch (BaseException e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+
+        }
+
+        /**
+         * 이미 하트를 눌렀던 경우 (isAlreadyLike)
+         * - Like 테이블에서 기록 삭제
+         */
+        else {
+            Like findLike = likeRepository.findByMemberAndLikedMember(member, likedMember)
+                    .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+
+            try {
+                member.getLikeList().removeIf(request -> request.getLikedMember().getId().equals(memberIdRequest.getId()));
+                likeRepository.delete(findLike);
+
+                return "호감 표시를 삭제했습니다.";
+            } catch (BaseException e) {
+                throw new BaseException(DATABASE_INSERT_ERROR);
+            }
+        }
+    }
+
+    // 호감 표시 목록
+    public List<LikeFriendsPageResponse> getLikeFriendsInfo(Principal principal) throws BaseException {
+        Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);
+        if (optional.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USER);
+        }
+
+        Member member = optional.get();
+        List<Like> likeEntityList = member.getLikeList();
+        List<LikeFriendsPageResponse> likeFriendsPageResponseList = likeEntityList.stream()
+                .map(LikeFriendsPageResponse::LikeFriendEntityToLikeRes)
+                .collect(Collectors.toList());
+
+
+        if (likeEntityList.isEmpty()) {
             return Collections.emptyList();
         }
-        return friendInfoResponseList;
+
+        return likeFriendsPageResponseList;
     }
 }

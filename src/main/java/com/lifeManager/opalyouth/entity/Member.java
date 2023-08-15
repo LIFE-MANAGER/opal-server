@@ -87,6 +87,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "requestedMember", cascade = CascadeType.REMOVE)
     private List<FriendRequest> friendRequestList = new ArrayList<FriendRequest>();
 
+    // 호감표시한 멤버 목록
+    @JsonBackReference
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Like> likeList = new ArrayList<Like>();
+
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_details_idx")
     private Details details;
@@ -142,5 +147,9 @@ public class Member extends BaseEntity {
     public void addFriendRequest(Member member) {
         FriendRequest friendRequest = new FriendRequest(this, member);
         this.friendRequestList.add(friendRequest);
+    }
+
+    public void addLikedMember(Like like) {
+        this.likeList.add(like);
     }
 }
