@@ -50,6 +50,7 @@ public class Details extends BaseEntity {
     }
 
     public static MaritalStatus stringToMaritalStatus(String str) {
+        System.out.println("str : " + str);
         return MaritalStatus.valueOf(str.toUpperCase());
     }
 }

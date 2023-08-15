@@ -26,7 +26,7 @@ public enum BaseResponseStatus {
     EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
     ALREADY_BLOCKED(false, HttpStatus.CONFLICT.value(), "이미 차단한 회원입니다."),
     IMAGE_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 이미지입니다."),
-    ALREADY_REQUESTED(false, HttpStatus.CONFLICT.value(), "이미 친구요청을 보냈습니다."),
+    ALREADY_REQUESTED(false, HttpStatus.CONFLICT.value(), "이미 친구 요청을 보냈습니다."),
     EXIST_CHAT_ROOM(false, HttpStatus.NO_CONTENT.value(), "이미 존재하는 채팅방입니다."),
     NON_EXIST_CHAT_ROOM(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 채팅방입니다."),
 

@@ -1,5 +1,6 @@
 package com.lifeManager.opalyouth.dto.member.response;
 
+import com.lifeManager.opalyouth.entity.Details;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public class MemberInfoResponse {
     private LocalDate birth;
     private String nickname;
     private String job;
-    private String maritalStatus;
+    private Details.MaritalStatus maritalStatus;
     private boolean hasChildren;
     private String personality;
     private String hobby;

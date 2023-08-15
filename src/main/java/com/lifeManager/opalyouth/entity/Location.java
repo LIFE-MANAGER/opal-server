@@ -1,5 +1,6 @@
 package com.lifeManager.opalyouth.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import lombok.*;
 import org.locationtech.jts.geom.Coordinate;
@@ -20,6 +21,7 @@ public class Location extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @Column(name = "location")
     private Point point;
 
