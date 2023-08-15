@@ -54,7 +54,7 @@ public class LoginService {
         if (!bCryptPasswordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new BaseException(WRONG_PASSWORD);
         }
-        Map<String, String> tokens = jwtUtils.generateToken(member.getEmail());
+        Map<String, String> tokens = jwtUtils.generateToken(member);
 
         response.addHeader(JWT_ACCESS_TOKEN_HEADER_NAME, JWT_ACCESS_TOKEN_TYPE + tokens.get("accessToken"));
 
@@ -91,7 +91,7 @@ public class LoginService {
             }
         } else {
             // 회원가입이 이미 되어있는 회원이라면 권한을 부여한다.
-            grantAuthentication(response, optionalMember);
+            grantAuthentication(response, optionalMember.get());
         }
     }
 
@@ -120,20 +120,21 @@ public class LoginService {
                 throw new BaseException(INTERNAL_SERVER_ERROR);
             }
         } else {
-            grantAuthentication(response, optionalMember);
+            grantAuthentication(response, optionalMember.get());
         }
     }
 
     /**
      * Jwt 토큰을 생성하여 클라이언트에 보내고 루트페이지로 리다이렉트 시킨다.
      * @param response
-     * @param optionalMember
+     * @param member
      */
-    private void grantAuthentication(HttpServletResponse response, Optional<Member> optionalMember) {
-        // 권한 만들기
-        OpalPrincipal opalPrincipal = OpalPrincipal.createOpalPrincipalByMemberEntity(optionalMember.get());
+    private void grantAuthentication(HttpServletResponse response, Member member) {
+        // 권한 만들기 (JwtAuthorizationFilter에서 SecurityContext에 넣으므로 불필요 할 듯 함.
+        // OpalPrincipal opalPrincipal = OpalPrincipal.createOpalPrincipalByMemberEntity(member);
+
         // Jwt토큰 생성
-        Map<String, String> token = jwtUtils.generateToken(opalPrincipal.getEmail());
+        Map<String, String> token = jwtUtils.generateToken(member);
 
         // Authorization Header에는 엑세스 토큰, 쿠키에는 Refresh Token을 담아 클라이언트에 전송
         response.addHeader(JWT_ACCESS_TOKEN_HEADER_NAME, JWT_ACCESS_TOKEN_TYPE + token.get("accessToken"));

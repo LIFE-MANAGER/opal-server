@@ -1,4 +1,4 @@
-package com.lifeManager.opalyouth.dto.member;
+package com.lifeManager.opalyouth.dto.member.response;
 
 import lombok.Builder;
 import lombok.Getter;

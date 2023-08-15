@@ -2,7 +2,10 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
-import com.lifeManager.opalyouth.dto.member.*;
+import com.lifeManager.opalyouth.dto.member.request.*;
+import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
+import com.lifeManager.opalyouth.dto.member.response.FriendInfoResponse;
+import com.lifeManager.opalyouth.dto.member.response.MemberInfoResponse;
 import org.springframework.validation.BindingResult;
 
 import com.lifeManager.opalyouth.service.MemberService;

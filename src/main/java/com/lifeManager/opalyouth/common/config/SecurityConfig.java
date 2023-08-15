@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         // authorization
         http.authorizeRequests()
-                .antMatchers("/login/**", "/signup", "/").permitAll()
+                .antMatchers("/login/**", "/signup", "/", "/stomp/**", "/chat/**").permitAll() // todo : 프론트앤드 구현 완료 시 /chat/**는 삭제
                 .anyRequest().hasRole("USER");
     }
 
