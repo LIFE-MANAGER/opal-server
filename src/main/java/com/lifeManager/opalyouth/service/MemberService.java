@@ -3,9 +3,13 @@ package com.lifeManager.opalyouth.service;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.dto.member.request.MemberIdRequest;
+import com.lifeManager.opalyouth.dto.member.request.MemberProfileInfoRequest;
+import com.lifeManager.opalyouth.dto.member.request.MemberSignupRequest;
+import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
+import com.lifeManager.opalyouth.dto.member.response.*;
 import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
 import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
-import com.lifeManager.opalyouth.dto.member.*;
 import com.lifeManager.opalyouth.entity.*;
 import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.entity.Block;
@@ -479,7 +483,7 @@ public class MemberService {
 
         return friendsPageResponse;
     }
-    
+
     // 호감 표시
     public String setLikeButton(Principal principal, MemberIdRequest memberIdRequest) throws BaseException {
         Optional<Member> optional = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE);

@@ -1,10 +1,8 @@
-package com.lifeManager.opalyouth.dto.member;
+package com.lifeManager.opalyouth.dto.member.response;
 
 import com.lifeManager.opalyouth.entity.Birth;
 import com.lifeManager.opalyouth.entity.Friends;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 public class FriendInfoResponse {

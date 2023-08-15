@@ -21,12 +21,17 @@ public class Message extends BaseEntity {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "chatroom_member_idx")
-    private ChatroomMember chatroomMember;
+    @JoinColumn(name = "send_member_idx")
+    private Member sendMember;
+
+    @ManyToOne
+    @JoinColumn(name = "chatroom_idx")
+    private Chatroom chatroom;
 
     @Builder
-    public Message(String content, ChatroomMember chatroomMember) {
+    public Message(String content, Member sendMember, Chatroom chatroom) {
         this.content = content;
-        this.chatroomMember = chatroomMember;
+        this.sendMember = sendMember;
+        this.chatroom = chatroom;
     }
 }

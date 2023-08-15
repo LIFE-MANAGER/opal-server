@@ -1,4 +1,4 @@
-package com.lifeManager.opalyouth.dto.member;
+package com.lifeManager.opalyouth.dto.member.request;
 
 import com.lifeManager.opalyouth.entity.Details;
 import lombok.Getter;
