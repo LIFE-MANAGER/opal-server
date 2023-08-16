@@ -5,7 +5,6 @@ import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
 import com.lifeManager.opalyouth.dto.friends.BriefFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.friends.DetailFriendsInfoResponse;
-import com.lifeManager.opalyouth.dto.member.request.FriendsConditionRequest;
 import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
 import com.lifeManager.opalyouth.entity.TodaysFriends;
