@@ -10,6 +10,7 @@ public enum BaseResponseStatus {
      * 코드의 원활한 이해을 위해 code는 숫자가 아닌 아래 형태로 입력해주세요.
      */
     SUCCESS(true, HttpStatus.OK.value(), "요청에 성공하였습니다."),
+    MATCH(true, HttpStatus.ACCEPTED.value(), "친구 목록에 추가되었습니다."),
 
     /**
      * Client Error - 4xx 에러
@@ -23,13 +24,19 @@ public enum BaseResponseStatus {
     INVALID_JWT_TOKEN(false, HttpStatus.NOT_ACCEPTABLE.value(), "유효하지 않은 토큰입니다."),
     LIMIT_NICKNAME_CHANGE(false, HttpStatus.TOO_MANY_REQUESTS.value(), "마지막 닉네임 변경일로부터 7일이 경과하지 않았습니다."),
     EXIST_NICKNAME(false, HttpStatus.CONFLICT.value(), "이미 존재하는 이름입니다."),
-
+    ALREADY_BLOCKED(false, HttpStatus.CONFLICT.value(), "이미 차단한 회원입니다."),
+    IMAGE_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 이미지입니다."),
+    ALREADY_REQUESTED(false, HttpStatus.CONFLICT.value(), "이미 친구 요청을 보냈습니다."),
+    EXIST_CHAT_ROOM(false, HttpStatus.CONFLICT.value(), "이미 존재하는 채팅방입니다."),
+    NON_EXIST_CHAT_ROOM(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 채팅방입니다."),
 
     /**
      * Server Error - 5xx 에러
      */
     IMAGE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "이미지 저장에 실패하였습니다."),
+    SEND_MESSAGE_FAILURE(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 코드 전송에 실패하였습니다."),
     DATABASE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 저장에 실패하였습니다."),
+    INIT_TODAY_FRIENDS_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "오늘의 친구 추천에 실패하였습니다."),
     INTERNAL_SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "알 수 없는 에러가 발생하였습니다."),
     ;
 

@@ -1,6 +1,5 @@
 package com.lifeManager.opalyouth.controller;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
 import com.lifeManager.opalyouth.utils.ImageUtils;
@@ -11,15 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class ImageController {
-    private final AmazonS3Client amazonS3Client;
     private final ImageUtils imageUtils;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -30,7 +26,7 @@ public class ImageController {
      * @param files
      * @return
      */
-    @PostMapping("/upload-test")
+    @PostMapping("/images/upload")
     public BaseResponse<List<String>> testUploadFile(@RequestParam("files") List<MultipartFile> files) {
         try {
             String folder = LocalDate.now().toString();

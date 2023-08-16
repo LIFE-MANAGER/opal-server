@@ -2,26 +2,32 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
-import com.lifeManager.opalyouth.dto.member.MemberNicknameRequest;
-import com.lifeManager.opalyouth.dto.member.MemberSignupRequest;
+import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
+import com.lifeManager.opalyouth.dto.member.request.*;
+import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
+import com.lifeManager.opalyouth.dto.member.response.*;
+import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
+import com.lifeManager.opalyouth.dto.messageCertify.MessageCertifyRequest;
+import com.lifeManager.opalyouth.dto.messageCertify.MessageCertifyResponse;
+import com.lifeManager.opalyouth.utils.MessageCertifyUtil;
 import org.springframework.validation.BindingResult;
 
-import com.lifeManager.opalyouth.dto.member.MemberInfoResponse;
-import com.lifeManager.opalyouth.entity.Block;
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
-import javax.validation.Valid;
 
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final MessageCertifyUtil messageCertifyUtil;
 
     @PostMapping("/signup")
     public BaseResponse<String> signup(@Valid @RequestBody MemberSignupRequest memberSignupRequest, BindingResult result) {
@@ -38,6 +44,17 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/message/certify")
+    public BaseResponse<MessageCertifyResponse> messageCertificate(@RequestBody MessageCertifyRequest messageCertifyRequest) {
+        try {
+            MessageCertifyResponse messageCertifyResponse = messageCertifyUtil.sendSms(messageCertifyRequest);
+            return new BaseResponse<>(messageCertifyResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponse<>(new BaseException(BaseResponseStatus.SEND_MESSAGE_FAILURE).getStatus());
+        }
+    }
+
     // 마이페이지
     @GetMapping("/mypage")
     public BaseResponse<MemberInfoResponse> getMyPageInfo(Principal principal) {
@@ -50,7 +67,15 @@ public class MemberController {
     }
 
     // 프로필 이미지 수정
-
+    @PatchMapping("/profile-image")
+    public BaseResponse<String> updateImage(Principal principal, @RequestBody MemberImageRequest memberImageRequest) {
+        try {
+            memberService.updateProfileImage(principal, memberImageRequest.getImageUrl());
+            return new BaseResponse<>("이미지 수정에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
 
     // 닉네임 수정
@@ -66,9 +91,9 @@ public class MemberController {
 
     // 프로필 수정
     @PatchMapping("/profile")
-    public BaseResponse<String> updateProfile(Principal principal, @RequestBody MemberInfoResponse memberInfoResponse) {
+    public BaseResponse<String> updateProfile(Principal principal, @RequestBody MemberProfileInfoRequest memberProfileInfoRequest) {
         try {
-            memberService.updateProfile(principal, memberInfoResponse);
+            memberService.updateProfile(principal, memberProfileInfoRequest);
             return new BaseResponse<>("프로필을 수정하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -77,9 +102,9 @@ public class MemberController {
 
     // 차단목록 반환
     @GetMapping("/blocked-member")
-    public BaseResponse<List<Block>> getBlockedMember(Principal principal) {
+    public BaseResponse<List<BlockedMemberResponse>> getBlockedMember(Principal principal) {
         try {
-            List<Block> blockList = memberService.getBlockedInfo(principal);
+            List<BlockedMemberResponse> blockList = memberService.getBlockedInfo(principal);
             return new BaseResponse<>(blockList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -87,5 +112,69 @@ public class MemberController {
     }
 
     // 차단 해제
+    @PatchMapping("/unblock-member")
+    public BaseResponse<String> unblockMember(Principal principal, @RequestBody MemberIdRequest memberId) {
+        try {
+            memberService.unblockMember(principal, memberId);
+            return new BaseResponse<>("차단을 해제하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
+    // 차단
+    @PostMapping("/block")
+    public BaseResponse<String> setBlockMember(Principal principal, @RequestBody MemberIdRequest memberId) {
+        try {
+            memberService.setBlockMember(principal, memberId);
+            return new BaseResponse<>("차단에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    // 친구 요청
+    @PostMapping("/request-friend")
+    public BaseResponse<String> requestFriend(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            memberService.requestFriend(principal, memberIdRequest);
+            return new BaseResponse<>("친구 요청에 성공하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    // 친구 목록
+    @GetMapping("/friends-list")
+    public BaseResponse<FriendsPageResponse> getFriendsInfo(Principal principal) {
+        try {
+            FriendsPageResponse friendsPageResponse = memberService.getFriendsInfo(principal);
+            return new BaseResponse<>(friendsPageResponse);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    // 호감 표시
+    @PostMapping("/like")
+    public BaseResponse<String> setLike(Principal principal, @RequestBody MemberIdRequest memberIdRequest) {
+        try {
+            String result = memberService.setLikeButton(principal, memberIdRequest);
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    // 호감 표시 목록
+    @GetMapping("/like-list")
+    public BaseResponse<List<LikeFriendsPageResponse>> getLikeFriends(Principal principal) {
+        try {
+            List<LikeFriendsPageResponse> friendsPageResponseList = memberService.getLikeFriendsInfo(principal);
+            return new BaseResponse<>(friendsPageResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

@@ -1,22 +1,24 @@
-package com.lifeManager.opalyouth.dto.member;
+package com.lifeManager.opalyouth.dto.member.response;
 
-import com.lifeManager.opalyouth.entity.Image;
+import com.lifeManager.opalyouth.entity.Details;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Builder
 public class MemberInfoResponse {
-    private List<Image> imageList;
+    private String imageUrl;
     private LocalDate birth;
     private String nickname;
     private String job;
-    private boolean isMarried;
+    private Details.MaritalStatus maritalStatus;
     private boolean hasChildren;
     private String personality;
     private String hobby;
     private String introduction;    // 자기소개
+    private Double latitude;
+    private Double longitude;
+    private int blockMemberNumber;
 }

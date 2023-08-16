@@ -2,6 +2,7 @@ package com.lifeManager.opalyouth.utils;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
+import com.lifeManager.opalyouth.entity.Member;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -39,12 +40,13 @@ public class JwtUtils {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Map<String, String> generateToken (String email) {
+    public Map<String, String> generateToken (Member member) {
         String accessToken = Jwts.builder()
                 .setHeaderParam("alg", "HS256")
                 .setHeaderParam("typ", "JWT")
-                .claim("uemail", email)
-                .setExpiration(new Date(System.currentTimeMillis()+ ACCESS_TOKEN_EXPIRE_TIME))
+                .claim("uemail", member.getEmail())
+                .claim("uid", member.getId())
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -70,6 +72,23 @@ public class JwtUtils {
                     .getBody()
                     .get("uemail", String.class);
             return email;
+        } catch (ExpiredJwtException expiredJwt) {
+            throw new BaseException(BaseResponseStatus.EXPIRED_JWT_TOKEN);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INVALID_JWT_TOKEN);
+        }
+    }
+
+    public Long getUserId(String accessToken) throws BaseException {
+        try {
+            Long id = Jwts
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody()
+                    .get("uid", Long.class);
+            return id;
         } catch (ExpiredJwtException expiredJwt) {
             throw new BaseException(BaseResponseStatus.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {

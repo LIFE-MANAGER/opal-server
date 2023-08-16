@@ -1,4 +1,4 @@
-package com.lifeManager.opalyouth.dto.member;
+package com.lifeManager.opalyouth.dto.member.request;
 
 import lombok.Getter;
 
@@ -24,6 +24,8 @@ public class MemberSignupRequest { // 회원가입 요청 Dto
     @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$")
     private String phoneNum;
 
+    private String gender;
+
     private String job;
 
     @NotBlank private String introduction; // 자기소개
@@ -39,11 +41,10 @@ public class MemberSignupRequest { // 회원가입 요청 Dto
     private Double longitude;
 
     private String imgUrl;
-
     @Getter
     public static class DetailsSignupRequest {
         private String relationType;
-        private boolean isMarried;
+        private String maritalStatus;
         private boolean hasChildren;
         private String personality;
         private String hobby;

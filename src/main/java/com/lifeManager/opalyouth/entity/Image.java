@@ -20,7 +20,7 @@ public class Image extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String url;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
@@ -28,5 +28,10 @@ public class Image extends BaseEntity {
     public Image(String url, Member member) {
         this.url = url;
         this.member = member;
+    }
+
+    public void updateUrl(String changedUrl) {
+        this.url = changedUrl;
+        member.setImage(this);
     }
 }

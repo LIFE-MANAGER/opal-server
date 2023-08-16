@@ -1,6 +1,8 @@
 package com.lifeManager.opalyouth.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lifeManager.opalyouth.common.entity.BaseEntity;
+import com.nimbusds.jose.shaded.json.annotate.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,6 +38,9 @@ public class Member extends BaseEntity {
     @Column(name = "phoneNum", nullable = false)
     private String phoneNum;
 
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
     @Column(name = "job", length = 25)
     private String job;
 
@@ -60,23 +65,42 @@ public class Member extends BaseEntity {
 
 
     // 차단한 친구 목록
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Block> blockList = new ArrayList<Block>();
 
     // 채팅방 관련 정보 목록.
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<ChatroomMember> chatroomMemberList = new ArrayList<ChatroomMember>();
 
     // 친구 목록
+    @JsonBackReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Friends> friendsList = new ArrayList<Friends>();
 
     // 프로필 사진 목록
-    @OneToMany
-    @JoinColumn(name = "image_idx")
-    private List<Image> imageList =  new ArrayList<Image>();
+    @Setter
+    @JsonBackReference
+    @OneToOne(mappedBy = "member")
+    private Image image;
 
+    // 친구 요청받은 목록
+    @JsonBackReference
+    @OneToMany(mappedBy = "requestedMember", cascade = CascadeType.REMOVE)
+    private List<FriendRequest> friendRequestList = new ArrayList<FriendRequest>();
+
+    // 호감표시한 멤버 목록
+    @JsonBackReference
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Like> likeList = new ArrayList<Like>();
+
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "group_chat_idx")
+    private GroupChat groupChat;
+
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_details_idx")
     private Details details;
 
@@ -85,6 +109,7 @@ public class Member extends BaseEntity {
     private Birth birth;
 
     @OneToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
     @JoinColumn(name = "member_location_idx")
     private Location location;
 
@@ -93,13 +118,14 @@ public class Member extends BaseEntity {
     private item item;
 
     @Builder
-    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item) {
+    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String gender, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item, LocalDate nicknameUpdateAt) {
         this.idWithProvider = idWithProvider;
         this.nickname = nickname;
         this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
+        this.gender = gender;
         this.job = job;
         this.introduction = introduction;
         this.locationEnabled = locationEnabled;
@@ -108,10 +134,31 @@ public class Member extends BaseEntity {
         this.birth = birth;
         this.location = location;
         this.item = item;
+        this.nicknameUpdateAt = nicknameUpdateAt;
     }
 
     public enum Role {
         USER,
         ADMIN
+    }
+
+    public void addBlock(Block block) {
+        this.blockList.add(block);
+        if (block.getBlockedMember() != this){
+            block.setBlockedMember(this);
+        }
+    }
+
+    public void addFriends(Friends friend) {
+        this.friendsList.add(friend);
+    }
+
+    public void addFriendRequest(Member member) {
+        FriendRequest friendRequest = new FriendRequest(this, member);
+        this.friendRequestList.add(friendRequest);
+    }
+
+    public void addLikedMember(Like like) {
+        this.likeList.add(like);
     }
 }
