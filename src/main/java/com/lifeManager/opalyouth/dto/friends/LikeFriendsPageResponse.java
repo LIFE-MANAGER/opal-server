@@ -18,7 +18,6 @@ public class LikeFriendsPageResponse {
 
     public LikeFriendsPageResponse() {
     }
-
     public LikeFriendsPageResponse(String imageUrl, String nickname, LocalDate birth, Double latitude, Double longitude) {
         this.imageUrl = imageUrl;
         this.nickname = nickname;

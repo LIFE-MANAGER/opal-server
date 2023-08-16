@@ -25,7 +25,6 @@ public class Location extends BaseEntity {
     @Column(name = "location")
     private Point point;
 
-
     @Builder
     public Location(Double latitude, Double longitude) {
         this.point = createPoint(latitude, longitude);

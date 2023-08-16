@@ -5,6 +5,7 @@ import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
 import com.lifeManager.opalyouth.dto.friends.BriefFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.friends.DetailFriendsInfoResponse;
+import com.lifeManager.opalyouth.dto.member.request.FriendsConditionRequest;
 import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
 import com.lifeManager.opalyouth.entity.TodaysFriends;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -174,4 +176,30 @@ public class FriendsService {
     }
 
 
+    // 직접 찾기
+    public List<BriefFriendsInfoResponse> recommendByCondition(Principal principal, FriendsConditionRequest friendsConditionRequest) throws BaseException {
+        Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+
+        List<Member> memberList = memberRepository.findAll();
+        List<Member> targetMembers = memberList.stream()
+                .filter(target -> target.getGender().equals(friendsConditionRequest.getGender()))
+                .filter(target -> {
+                    int age = LocalDate.now().getYear() - target.getBirth().getBirth().getYear();
+                    return age >= friendsConditionRequest.getAge() && age < friendsConditionRequest.getAge() + 10;
+                })
+                .filter(target -> target.getDetails().getMaritalStatus() == Details.stringToMaritalStatus(friendsConditionRequest.getMaritalStatus()))
+                .filter(target -> target.getDetails().isHasChildren() == friendsConditionRequest.isHasChildren())
+                .filter(target -> target.getDetails().getPersonality().equals(friendsConditionRequest.getPersonality()))
+                .collect(Collectors.toList());
+
+        List<BriefFriendsInfoResponse> briefFriendsInfoResponseList = targetMembers.stream()
+                .map(BriefFriendsInfoResponse::entityToBriefFriendInfoDto)
+                .collect(Collectors.toList());
+
+        if (briefFriendsInfoResponseList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return briefFriendsInfoResponseList;
+    }
 }

@@ -95,15 +95,15 @@ insert into member_details (created_at, state, updated_at, has_children, hobby, 
 
 insert into member_birth (created_at, state, updated_at, birth) VALUES
     (now(), "ACTIVE", now(), "1999-11-11") ,
-    (now(), "ACTIVE", now(), "1999-02-01") ,
-    (now(), "ACTIVE", now(), "1999-01-11") ,
-    (now(), "ACTIVE", now(), "1999-03-11") ,
-    (now(), "ACTIVE", now(), "1999-04-11") ,
-    (now(), "ACTIVE", now(), "1999-05-11") ,
-    (now(), "ACTIVE", now(), "1999-06-11") ,
-    (now(), "ACTIVE", now(), "1999-07-11") ,
-    (now(), "ACTIVE", now(), "1999-08-11") ,
-    (now(), "ACTIVE", now(), "1999-09-11")
+    (now(), "ACTIVE", now(), "1950-02-01") ,
+    (now(), "ACTIVE", now(), "1950-01-11") ,
+    (now(), "ACTIVE", now(), "1960-03-11") ,
+    (now(), "ACTIVE", now(), "1960-04-11") ,
+    (now(), "ACTIVE", now(), "1960-05-11") ,
+    (now(), "ACTIVE", now(), "1970-06-11") ,
+    (now(), "ACTIVE", now(), "1970-07-11") ,
+    (now(), "ACTIVE", now(), "1970-08-11") ,
+    (now(), "ACTIVE", now(), "1950-09-11")
 
 ;
 

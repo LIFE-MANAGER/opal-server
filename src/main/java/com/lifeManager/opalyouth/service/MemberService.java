@@ -560,7 +560,6 @@ public class MemberService {
                 .map(LikeFriendsPageResponse::LikeFriendEntityToLikeRes)
                 .collect(Collectors.toList());
 
-
         if (likeEntityList.isEmpty()) {
             return Collections.emptyList();
         }
