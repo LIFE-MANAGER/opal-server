@@ -34,6 +34,7 @@ public enum BaseResponseStatus {
      * Server Error - 5xx 에러
      */
     IMAGE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "이미지 저장에 실패하였습니다."),
+    SEND_MESSAGE_FAILURE(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 코드 전송에 실패하였습니다."),
     DATABASE_INSERT_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 저장에 실패하였습니다."),
     INIT_TODAY_FRIENDS_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "오늘의 친구 추천에 실패하였습니다."),
     INTERNAL_SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "알 수 없는 에러가 발생하였습니다."),

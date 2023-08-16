@@ -2,29 +2,32 @@ package com.lifeManager.opalyouth.controller;
 
 import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
+import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
 import com.lifeManager.opalyouth.dto.friends.FriendsPageResponse;
 import com.lifeManager.opalyouth.dto.member.request.*;
 import com.lifeManager.opalyouth.dto.member.response.BlockedMemberResponse;
 import com.lifeManager.opalyouth.dto.member.response.*;
 import com.lifeManager.opalyouth.dto.friends.LikeFriendsPageResponse;
+import com.lifeManager.opalyouth.dto.messageCertify.MessageCertifyRequest;
+import com.lifeManager.opalyouth.dto.messageCertify.MessageCertifyResponse;
+import com.lifeManager.opalyouth.utils.MessageCertifyUtil;
 import org.springframework.validation.BindingResult;
 
 import com.lifeManager.opalyouth.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
-import javax.validation.Valid;
 
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final MessageCertifyUtil messageCertifyUtil;
 
     @PostMapping("/signup")
     public BaseResponse<String> signup(@Valid @RequestBody MemberSignupRequest memberSignupRequest, BindingResult result) {
@@ -38,6 +41,17 @@ public class MemberController {
             return new BaseResponse<>("회원가입에 성공하였습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @PostMapping("/message/certify")
+    public BaseResponse<MessageCertifyResponse> messageCertificate(@RequestBody MessageCertifyRequest messageCertifyRequest) {
+        try {
+            MessageCertifyResponse messageCertifyResponse = messageCertifyUtil.sendSms(messageCertifyRequest);
+            return new BaseResponse<>(messageCertifyResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponse<>(new BaseException(BaseResponseStatus.SEND_MESSAGE_FAILURE).getStatus());
         }
     }
 
