@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 public class LikeFriendsPageResponse {
+    private String imageUrl;
     private String nickname;
     private LocalDate birth;
     private Double latitude;
@@ -18,7 +19,8 @@ public class LikeFriendsPageResponse {
     public LikeFriendsPageResponse() {
     }
 
-    public LikeFriendsPageResponse(String nickname, LocalDate birth, Double latitude, Double longitude) {
+    public LikeFriendsPageResponse(String imageUrl, String nickname, LocalDate birth, Double latitude, Double longitude) {
+        this.imageUrl = imageUrl;
         this.nickname = nickname;
         this.birth = birth;
         this.latitude = latitude;
@@ -27,6 +29,7 @@ public class LikeFriendsPageResponse {
 
     public static LikeFriendsPageResponse LikeFriendEntityToLikeRes(Like like) {
         return new LikeFriendsPageResponse(
+                like.getLikedMember().getImage().getUrl(),
                 like.getLikedMember().getNickname(),
                 like.getLikedMember().getBirth().getBirth(),
                 like.getLikedMember().getLocation().getLatitude(),

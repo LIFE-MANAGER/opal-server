@@ -5,31 +5,36 @@ import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponseStatus;
 import com.lifeManager.opalyouth.dto.friends.BriefFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.friends.DetailFriendsInfoResponse;
+import com.lifeManager.opalyouth.dto.member.request.FriendsConditionRequest;
+import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
 import com.lifeManager.opalyouth.entity.TodaysFriends;
+import com.lifeManager.opalyouth.repository.DetailsRepository;
 import com.lifeManager.opalyouth.repository.MemberRepository;
 import com.lifeManager.opalyouth.repository.TodaysFriendsRepository;
 import com.lifeManager.opalyouth.utils.RefreshRecommendUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.INIT_TODAY_FRIENDS_ERROR;
+import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.NON_EXIST_USER;
 
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 @Service
 public class FriendsService {
 
     private final MemberRepository memberRepository;
     private final TodaysFriendsRepository todaysFriendsRepository;
     private final RefreshRecommendUtils refreshRecommendUtils;
+    private final DetailsRepository detailsRepository;
 
     public void refreshFriends(Principal principal) {
         Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
@@ -146,4 +151,28 @@ public class FriendsService {
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
     }
+
+    // 내 취향 반영 친구 추천
+    public List<BriefFriendsInfoResponse> recommendByRelationType(Principal principal) throws BaseException {
+        Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+
+        String relationType = member.getDetails().getRelationType();
+
+        List<Details> byRelationType = detailsRepository.findByRelationType(relationType);
+        byRelationType.removeIf(details -> details.getMember().equals(member));
+        Collections.shuffle(byRelationType);    // 랜덤
+
+        List<BriefFriendsInfoResponse> recommendFriendsResponseList = byRelationType.stream()
+                .map(BriefFriendsInfoResponse::entityToBriefFriendInfoDto)
+                .collect(Collectors.toList());
+
+
+        if (recommendFriendsResponseList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return recommendFriendsResponseList;
+    }
+
+
 }

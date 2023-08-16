@@ -1,5 +1,6 @@
 package com.lifeManager.opalyouth.dto.friends;
 
+import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class BriefFriendsInfoResponse {
+    private String imageUrl;
     private String nickname;
     private LocalDate birth;
     private Double latitude;
@@ -22,7 +24,8 @@ public class BriefFriendsInfoResponse {
     public BriefFriendsInfoResponse() {
     }
 
-    public BriefFriendsInfoResponse(String nickname, LocalDate birth, Double latitude, Double longitude, String personality, String hobby, String relationType) {
+    public BriefFriendsInfoResponse(String imageUrl, String nickname, LocalDate birth, Double latitude, Double longitude, String personality, String hobby, String relationType) {
+        this.imageUrl = imageUrl;
         this.nickname = nickname;
         this.birth = birth;
         this.latitude = latitude;
@@ -34,6 +37,7 @@ public class BriefFriendsInfoResponse {
 
     public static BriefFriendsInfoResponse entityToBriefFriendInfoDto(Member member) {
         return new BriefFriendsInfoResponse(
+                member.getImage().getUrl(),
                 member.getNickname(),
                 member.getBirth().getBirth(),
                 member.getLocation().getLatitude(),
@@ -41,6 +45,19 @@ public class BriefFriendsInfoResponse {
                 member.getDetails().getPersonality(),
                 member.getDetails().getHobby(),
                 member.getDetails().getRelationType()
+        );
+    }
+
+    public static BriefFriendsInfoResponse entityToBriefFriendInfoDto(Details details) {
+        return new BriefFriendsInfoResponse(
+                details.getMember().getImage().getUrl(),
+                details.getMember().getNickname(),
+                details.getMember().getBirth().getBirth(),
+                details.getMember().getLocation().getLatitude(),
+                details.getMember().getLocation().getLongitude(),
+                details.getMember().getDetails().getPersonality(),
+                details.getMember().getDetails().getHobby(),
+                details.getMember().getDetails().getRelationType()
         );
     }
 }

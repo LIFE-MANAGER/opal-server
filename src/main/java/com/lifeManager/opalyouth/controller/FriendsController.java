@@ -50,4 +50,14 @@ public class FriendsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @GetMapping("/relation-type")
+    public BaseResponse<List<BriefFriendsInfoResponse>> recommendByRelationType(Principal principal) {
+        try {
+            List<BriefFriendsInfoResponse> recommendFriendsResponseList = friendsService.recommendByRelationType(principal);
+            return new BaseResponse<>(recommendFriendsResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
