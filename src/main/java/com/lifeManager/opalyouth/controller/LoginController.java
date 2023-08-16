@@ -23,7 +23,7 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public String test() {
         return "test";
     }

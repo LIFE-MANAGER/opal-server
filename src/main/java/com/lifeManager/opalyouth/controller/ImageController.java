@@ -26,7 +26,7 @@ public class ImageController {
      * @param files
      * @return
      */
-    @PostMapping("/upload/images")
+    @PostMapping("/images/upload")
     public BaseResponse<List<String>> testUploadFile(@RequestParam("files") List<MultipartFile> files) {
         try {
             String folder = LocalDate.now().toString();
