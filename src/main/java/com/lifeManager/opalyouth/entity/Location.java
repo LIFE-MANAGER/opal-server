@@ -25,9 +25,12 @@ public class Location extends BaseEntity {
     @Column(name = "location")
     private Point point;
 
+    @OneToOne(mappedBy = "location")
+    private Member member;
+
     @Builder
-    public Location(Double latitude, Double longitude) {
-        this.point = createPoint(latitude, longitude);
+    public Location(Double longitude, Double latitude) {
+        this.point = createPoint(longitude, latitude);
     }
 
     public static Point createPoint(double x, double y) {
@@ -37,11 +40,16 @@ public class Location extends BaseEntity {
         return geometryFactory.createPoint(new Coordinate(x, y));
     }
 
-    public Double getLatitude() {
+    public Double getLongitude() {
         return this.point.getX();
     }
 
-    public Double getLongitude() {
+    public Double getLatitude() {
         return this.point.getY();
+    }
+
+    public static Double getDistance(Point point1, Point point2) {
+        double distance = point1.distance(point2);
+        return distance / 1000;
     }
 }

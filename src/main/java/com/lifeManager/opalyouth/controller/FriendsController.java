@@ -59,6 +59,16 @@ public class FriendsController {
         }
     }
 
+    @GetMapping("/distance")
+    public BaseResponse<List<BriefFriendsInfoResponse>> recommendByDistance(Principal principal, @RequestParam int distance) {
+        try {
+            List<BriefFriendsInfoResponse> recommendFriendsResponseList = friendsService.recommendByDistance(principal, distance);
+            return new BaseResponse<>(recommendFriendsResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @GetMapping("/condition")
     public BaseResponse<List<BriefFriendsInfoResponse>> recommendByCondition(Principal principal, @RequestBody FriendsConditionRequest friendsConditionRequest) {
         try {

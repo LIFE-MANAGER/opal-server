@@ -26,17 +26,17 @@ insert into member_birth (created_at, state, updated_at, birth) VALUES
 ;
 
 insert into member_location (created_at, state, updated_at, location) VALUES
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22))
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326))
 ;
 
 
@@ -108,17 +108,17 @@ insert into member_birth (created_at, state, updated_at, birth) VALUES
 ;
 
 insert into member_location (created_at, state, updated_at, location) VALUES
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22))
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.123456)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.234567)', 4326)),
+    (now(), "ACTIVE", now(), ST_GeomFromText('POINT(37.123456 37.345678)', 4326))
 ;
 
 

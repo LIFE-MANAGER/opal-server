@@ -7,14 +7,17 @@ import com.lifeManager.opalyouth.dto.friends.BriefFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.friends.DetailFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.member.request.FriendsConditionRequest;
 import com.lifeManager.opalyouth.entity.Details;
+import com.lifeManager.opalyouth.entity.Location;
 import com.lifeManager.opalyouth.entity.Member;
 import com.lifeManager.opalyouth.entity.TodaysFriends;
 import com.lifeManager.opalyouth.repository.DetailsRepository;
+import com.lifeManager.opalyouth.repository.LocationRepository;
 import com.lifeManager.opalyouth.repository.MemberRepository;
 import com.lifeManager.opalyouth.repository.TodaysFriendsRepository;
 import com.lifeManager.opalyouth.utils.RefreshRecommendUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,8 @@ public class FriendsService {
     private final TodaysFriendsRepository todaysFriendsRepository;
     private final RefreshRecommendUtils refreshRecommendUtils;
     private final DetailsRepository detailsRepository;
+
+    private final LocationRepository locationRepository;
 
     public void refreshFriends(Principal principal) {
         Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
@@ -175,6 +180,26 @@ public class FriendsService {
         return recommendFriendsResponseList;
     }
 
+    public List<BriefFriendsInfoResponse> recommendByDistance(Principal principal, int distance) {
+        Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
+                .orElseThrow(()-> new BaseException(NON_EXIST_USER));
+        Point point = member.getLocation().getPoint();
+
+        List<Location> getLocationByDistance = locationRepository.findLocationsWithinDistance(point, distance);
+        getLocationByDistance.removeIf(location -> location.getMember().equals(member));
+        Collections.shuffle(getLocationByDistance);
+
+        List<BriefFriendsInfoResponse> recommendFriendsResponseList = getLocationByDistance
+                .stream()
+                .map(location -> BriefFriendsInfoResponse.entityToBriefFriendInfoDto(location.getMember()))
+                .collect(Collectors.toList());
+
+        if (recommendFriendsResponseList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return recommendFriendsResponseList;
+    }
+
 
     // 직접 찾기
     public List<BriefFriendsInfoResponse> recommendByCondition(Principal principal, FriendsConditionRequest friendsConditionRequest) throws BaseException {
@@ -191,6 +216,7 @@ public class FriendsService {
                 .filter(target -> target.getDetails().getMaritalStatus() == Details.stringToMaritalStatus(friendsConditionRequest.getMaritalStatus()))
                 .filter(target -> target.getDetails().isHasChildren() == friendsConditionRequest.isHasChildren())
                 .filter(target -> target.getDetails().getPersonality().equals(friendsConditionRequest.getPersonality()))
+                .filter(target -> Location.getDistance(member.getLocation().getPoint() , target.getLocation().getPoint()) < friendsConditionRequest.getDistance())
                 .collect(Collectors.toList());
 
         List<BriefFriendsInfoResponse> briefFriendsInfoResponseList = targetMembers.stream()

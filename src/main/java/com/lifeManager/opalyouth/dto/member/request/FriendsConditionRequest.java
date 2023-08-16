@@ -12,4 +12,5 @@ public class FriendsConditionRequest {
     private String maritalStatus;
     private boolean hasChildren;
     private String personality;
+    private int distance;
 }
