@@ -1,163 +1,304 @@
-insert into member_details (created_at, state, updated_at, has_children, hobby, marital_status, personality, relation_type) VALUES
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend")
-;
-
-insert into member_birth (created_at, state, updated_at, birth) VALUES
-    (now(), "ACTIVE", now(), "1999-11-11") ,
-    (now(), "ACTIVE", now(), "1999-02-01") ,
-    (now(), "ACTIVE", now(), "1999-01-11") ,
-    (now(), "ACTIVE", now(), "1999-03-11") ,
-    (now(), "ACTIVE", now(), "1999-04-11") ,
-    (now(), "ACTIVE", now(), "1999-05-11") ,
-    (now(), "ACTIVE", now(), "1999-06-11") ,
-    (now(), "ACTIVE", now(), "1999-07-11") ,
-    (now(), "ACTIVE", now(), "1999-08-11") ,
-    (now(), "ACTIVE", now(), "1999-09-11")
-
-;
-
-insert into member_location (created_at, state, updated_at, location) VALUES
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22))
-;
-
-
-insert into member (id_with_provider, nickname, member_name, email, password, phone_num, gender, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
-    ("LOCAL", "chann", "LeeDongChan", "ldc0000@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 1, 1, 1),
-    ("LOCAL", "minjung", "BokMinJung", "min1111@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 2, 2, 2),
-    ("KAKAO_12341423", "kakaoUser", "CHAN", "ldc1222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 3, 3, 3) ,
-    ("LOCAL", "user1", "USER1", "ldc1111@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 4, 4, 4) ,
-    ("LOCAL", "user2", "USER2", "ldc2222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 5, 5, 5) ,
-    ("LOCAL", "user3", "USER3", "ldc3333@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 6, 6, 6) ,
-    ("LOCAL", "user4", "USER4", "ldc4444@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 7, 7, 7) ,
-    ("LOCAL", "user5", "USER5", "ldc5555@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 8, 8, 8) ,
-    ("LOCAL", "user6", "USER6", "ldc6666@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 9, 9, 9) ,
-    ("LOCAL", "user7", "USER7", "ldc7777@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 10, 10, 10)
-;
-
-
-insert into todays_friends (member_idx, member_by_personality, member_by_relation_type, member_by_hobby) values
-    (1, 2, 3, 4) ,
-    (2, 1, 3, 4) ,
-    (3, 1, 2, 4) ,
-    (4, 1, 2, 3) ,
-    (5, 1, 2, 3) ,
-    (6, 2, 3, 4) ,
-    (7, 2, 3, 4) ,
-    (8, 2, 3, 4) ,
-    (9, 1, 2, 3) ,
-    (10, 1, 2, 3)
-;
-
-insert into member_image (created_at, state, updated_at, image_url, member_idx) VALUES
-    (now(), "ACTIVE", now(), "url1", 1),
-    (now(), "ACTIVE", now(), "url2", 2),
-    (now(), "ACTIVE", now(), "url3", 3),
-    (now(), "ACTIVE", now(), "url4", 4),
-    (now(), "ACTIVE", now(), "url5", 5),
-    (now(), "ACTIVE", now(), "url6", 6),
-    (now(), "ACTIVE", now(), "url7", 7),
-    (now(), "ACTIVE", now(), "url8", 8),
-    (now(), "ACTIVE", now(), "url9", 9),
-    (now(), "ACTIVE", now(), "url10", 10)
-;
-
-insert into member_details (created_at, state, updated_at, has_children, hobby, marital_status, personality, relation_type) VALUES
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend") ,
-    (now(), "ACTIVE", now(), true, "basketball", "MARRIED", "activity", "sexualfriend") ,
-    (now(), "ACTIVE", now(), true, "baseball", "MARRIED", "activity", "friend")
-;
-
-insert into member_birth (created_at, state, updated_at, birth) VALUES
-    (now(), "ACTIVE", now(), "1999-11-11") ,
-    (now(), "ACTIVE", now(), "1999-02-01") ,
-    (now(), "ACTIVE", now(), "1999-01-11") ,
-    (now(), "ACTIVE", now(), "1999-03-11") ,
-    (now(), "ACTIVE", now(), "1999-04-11") ,
-    (now(), "ACTIVE", now(), "1999-05-11") ,
-    (now(), "ACTIVE", now(), "1999-06-11") ,
-    (now(), "ACTIVE", now(), "1999-07-11") ,
-    (now(), "ACTIVE", now(), "1999-08-11") ,
-    (now(), "ACTIVE", now(), "1999-09-11")
-
-;
-
-insert into member_location (created_at, state, updated_at, location) VALUES
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22)),
-    (now(), "ACTIVE", now(), Point(22,22))
-;
-
-
-insert into member (id_with_provider, nickname, member_name, email, password, phone_num, gender, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
-    ("LOCAL", "chann2", "LeeDongChan2", "ldc00002@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 11, 11, 11),
-    ("LOCAL", "minjung2", "BokMinJung2", "min11112@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 12, 12, 12),
-    ("KAKAO_12341423", "kakaoUser2", "CHAN", "ldc12222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 13, 13, 13) ,
-    ("LOCAL", "user11", "USER11", "ldc11112@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 14, 14, 14) ,
-    ("LOCAL", "user12", "USER12", "ldc22222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 15, 15, 15) ,
-    ("LOCAL", "user13", "USER13", "ldc33332@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 16, 16, 16) ,
-    ("LOCAL", "user14", "USER14", "ldc44442@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 17, 17, 17) ,
-    ("LOCAL", "user15", "USER15", "ldc55552@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 18, 18, 18) ,
-    ("LOCAL", "user16", "USER16", "ldc66662@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 19, 19, 19) ,
-    ("LOCAL", "user17", "USER17", "ldc77772@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 20, 20, 20)
-;
-
-
-insert into todays_friends (member_idx, member_by_personality, member_by_relation_type, member_by_hobby) values
-    (11, 2, 3, 4) ,
-    (12, 1, 3, 4) ,
-    (13, 1, 2, 4) ,
-    (14, 1, 2, 3) ,
-    (15, 1, 2, 3) ,
-    (16, 2, 3, 4) ,
-    (17, 2, 3, 4) ,
-    (18, 2, 3, 4) ,
-    (19, 1, 2, 3) ,
-    (20, 1, 2, 3)
-;
-
-insert into member_image (created_at, state, updated_at, image_url, member_idx) VALUES
-    (now(), "ACTIVE", now(), "url11", 11),
-    (now(), "ACTIVE", now(), "url12", 12),
-    (now(), "ACTIVE", now(), "url13", 13),
-    (now(), "ACTIVE", now(), "url14", 14),
-    (now(), "ACTIVE", now(), "url15", 15),
-    (now(), "ACTIVE", now(), "url16", 16),
-    (now(), "ACTIVE", now(), "url17", 17),
-    (now(), "ACTIVE", now(), "url18", 18),
-    (now(), "ACTIVE", now(), "url19", 19),
-    (now(), "ACTIVE", now(), "url20", 20)
-;
+# insert into member_details (created_at, state, updated_at, has_children, hobby, marital_status, personality, relation_type) VALUES
+#     (now(), "ACTIVE", now(), true, "HIKE", "MARRIED", "ISFJ", "LOVE") ,
+#     (now(), "ACTIVE", now(), true, "HIKE", "MARRIED", "ISFP", "DRINKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "HIKE", "MARRIED", "ISTJ", "EATING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "TALK", "MARRIED", "ISTP", "SAME_AGE") ,
+#     (now(), "ACTIVE", now(), true, "TALK", "MARRIED", "INFJ", "NEIGHBORHOOD") ,
+#     (now(), "ACTIVE", now(), true, "TALK", "MARRIED", "INFP", "TALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "EAT", "MARRIED", "INTJ", "TRAVEL_MATE") ,
+#     (now(), "ACTIVE", now(), true, "EAT", "MARRIED", "INTP", "EXHIBITION_MATE") ,
+#     (now(), "ACTIVE", now(), true, "EAT", "MARRIED", "ESFJ", "WALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "TRAVEL", "MARRIED", "ESFP", "LOVE"),
+#
+#     (now(), "ACTIVE", now(), true, "TRAVEL", "MARRIED", "ESTJ", "DRINKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "TRAVEL", "MARRIED", "ESTP", "EATING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "WATCH_BASEBALL", "MARRIED", "ENFJ", "SAME_AGE") ,
+#     (now(), "ACTIVE", now(), true, "WATCH_BASEBALL", "MARRIED", "ENFP", "NEIGHBORHOOD") ,
+#     (now(), "ACTIVE", now(), true, "WATCH_BASEBALL", "MARRIED", "ENTJ", "TALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "MUSICAL_INSTRUMENT", "MARRIED", "ENTP", "TRAVEL_MATE") ,
+#     (now(), "ACTIVE", now(), true, "MUSICAL_INSTRUMENT", "MARRIED", "ISFJ", "EXHIBITION_MATE") ,
+#     (now(), "ACTIVE", now(), true, "MUSICAL_INSTRUMENT", "MARRIED", "ISFP", "WALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "COOK", "MARRIED", "ISTJ", "LOVE") ,
+#     (now(), "ACTIVE", now(), true, "COOK", "MARRIED", "ISTP", "DRINKING_MATE") ,
+#
+#     (now(), "ACTIVE", now(), true, "COOK", "MARRIED", "INFJ", "EATING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "DRIVE", "MARRIED", "INFP", "SAME_AGE") ,
+#     (now(), "ACTIVE", now(), true, "DRIVE", "MARRIED", "INTJ", "NEIGHBORHOOD"),
+#     (now(), "ACTIVE", now(), true, "DRIVE", "MARRIED", "INTP", "TALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "WALK", "MARRIED", "ESFJ", "TRAVEL_MATE") ,
+#     (now(), "ACTIVE", now(), true, "WALK", "MARRIED", "ESFP", "EXHIBITION_MATE") ,
+#     (now(), "ACTIVE", now(), true, "WALK", "MARRIED", "ESTJ", "WALKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "EXHIBITION", "MARRIED", "ESTP", "LOVE") ,
+#     (now(), "ACTIVE", now(), true, "EXHIBITION", "MARRIED", "ENFJ", "DRINKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "EXHIBITION", "MARRIED", "ENFP", "EATING_MATE") ,
+#
+#     (now(), "ACTIVE", now(), true, "WORK_OUT", "MARRIED", "ENTJ", "SAME_AGE") ,
+#     (now(), "ACTIVE", now(), true, "WORK_OUT", "MARRIED", "ENTP", "NEIGHBORHOOD") ,
+#     (now(), "ACTIVE", now(), true, "WORK_OUT", "MARRIED", "ISFJ", "TALKING_MATE"),
+#     (now(), "ACTIVE", now(), true, "FINE_ARTS", "MARRIED", "ISFP", "TRAVEL_MATE") ,
+#     (now(), "ACTIVE", now(), true, "FINE_ARTS", "MARRIED", "ESFJ", "EXHIBITION_MATE") ,
+#     (now(), "ACTIVE", now(), true, "FINE_ARTS", "MARRIED", "INTJ", "WALKING_MATE"),
+#     (now(), "ACTIVE", now(), true, "INVESTMENT", "MARRIED", "ESTP", "LOVE") ,
+#     (now(), "ACTIVE", now(), true, "INVESTMENT", "MARRIED", "ENFP", "DRINKING_MATE") ,
+#     (now(), "ACTIVE", now(), true, "INVESTMENT", "MARRIED", "ESTP", "EATING_MATE"),
+#     (now(), "ACTIVE", now(), true, "PHOTOGRAPY", "MARRIED", "INTJ", "SAME_AGE"),
+#
+#     (now(), "ACTIVE", now(), true, "PHOTOGRAPY", "MARRIED", "ENFP", "NEIGHBORHOOD"),
+#     (now(), "ACTIVE", now(), true, "PHOTOGRAPY", "MARRIED", "ESTP", "TALKING_MATE")
+# ;
+#
+# insert into member_birth (created_at, state, updated_at, birth) VALUES
+#     (now(), "ACTIVE", now(), "1977-11-11") ,
+#     (now(), "ACTIVE", now(), "1973-02-01") ,
+#     (now(), "ACTIVE", now(), "1976-01-11") ,
+#     (now(), "ACTIVE", now(), "1968-03-11") ,
+#     (now(), "ACTIVE", now(), "1977-04-21") ,
+#     (now(), "ACTIVE", now(), "1977-05-11") ,
+#     (now(), "ACTIVE", now(), "1972-06-11") ,
+#     (now(), "ACTIVE", now(), "1977-07-21") ,
+#     (now(), "ACTIVE", now(), "1967-08-11") ,
+#     (now(), "ACTIVE", now(), "1977-09-21") ,
+#
+#     (now(), "ACTIVE", now(), "1977-11-11") ,
+#     (now(), "ACTIVE", now(), "1973-02-01") ,
+#     (now(), "ACTIVE", now(), "1976-01-11") ,
+#     (now(), "ACTIVE", now(), "1968-03-11") ,
+#     (now(), "ACTIVE", now(), "1977-04-21") ,
+#     (now(), "ACTIVE", now(), "1977-05-11") ,
+#     (now(), "ACTIVE", now(), "1972-06-11") ,
+#     (now(), "ACTIVE", now(), "1977-07-21") ,
+#     (now(), "ACTIVE", now(), "1967-08-11") ,
+#     (now(), "ACTIVE", now(), "1977-09-21") ,
+#
+#     (now(), "ACTIVE", now(), "1977-11-11") ,
+#     (now(), "ACTIVE", now(), "1973-02-01") ,
+#     (now(), "ACTIVE", now(), "1976-01-11") ,
+#     (now(), "ACTIVE", now(), "1968-03-11") ,
+#     (now(), "ACTIVE", now(), "1977-04-21") ,
+#     (now(), "ACTIVE", now(), "1977-05-11") ,
+#     (now(), "ACTIVE", now(), "1972-06-11") ,
+#     (now(), "ACTIVE", now(), "1977-07-21") ,
+#     (now(), "ACTIVE", now(), "1967-08-11") ,
+#     (now(), "ACTIVE", now(), "1977-09-21") ,
+#
+#     (now(), "ACTIVE", now(), "1971-11-11") ,
+#     (now(), "ACTIVE", now(), "1977-02-01") ,
+#     (now(), "ACTIVE", now(), "1971-11-11") ,
+#     (now(), "ACTIVE", now(), "1977-02-01") ,
+#     (now(), "ACTIVE", now(), "1967-01-14") ,
+#     (now(), "ACTIVE", now(), "1971-03-11") ,
+#     (now(), "ACTIVE", now(), "1977-04-15") ,
+#     (now(), "ACTIVE", now(), "1977-05-11") ,
+#     (now(), "ACTIVE", now(), "1967-06-16") ,
+#     (now(), "ACTIVE", now(), "1971-07-11") ,
+#
+#     (now(), "ACTIVE", now(), "1967-08-09") ,
+#     (now(), "ACTIVE", now(), "1977-09-11")
+#
+# ;
+#
+# insert into member_location (created_at, state, updated_at, location) VALUES
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#
+#     (now(), "ACTIVE", now(), Point(22,22)),
+#     (now(), "ACTIVE", now(), Point(22,22))
+# ;
+#
+#
+# insert into member (id_with_provider, nickname, member_name, email, password, phone_num, gender, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
+#     ("LOCAL", "이동찬", "이동찬", "test11@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 1, 1, 1),
+#     ("LOCAL", "이금례", "이금례", "test12@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 2, 2, 2),
+#     ("LOCAL", "이정호", "이정호", "test13@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 3, 3, 3) ,
+#     ("LOCAL", "조성민", "조성민", "test14@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 4, 4, 4) ,
+#     ("LOCAL", "박정진", "박정진", "test15@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 5, 5, 5) ,
+#     ("LOCAL", "박호성", "박호성", "test16@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 6, 6, 6) ,
+#     ("LOCAL", "박민규", "박민규", "test17@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 7, 7, 7) ,
+#     ("LOCAL", "김호명", "김호명", "test18@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 8, 8, 8) ,
+#     ("LOCAL", "김문정", "김문정", "test19@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 9, 9, 9) ,
+#     ("LOCAL", "이순화", "이순화", "test20@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 10, 10, 10),
+#
+#
+#     ("LOCAL", "이민정", "이민정", "test21@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 11, 11, 11),
+#     ("LOCAL", "이선화", "이선화", "test22@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 12, 12, 12),
+#     ("LOCAL", "이상민", "이상민", "test23@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 13, 13, 13) ,
+#     ("LOCAL", "박상호", "박상호", "test24@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 14, 14, 14) ,
+#     ("LOCAL", "박상민", "박상민", "test25@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 15, 15, 15) ,
+#     ("LOCAL", "여정민", "여정민", "test26@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 16, 16, 16) ,
+#     ("LOCAL", "이세화", "이세화", "test27@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 17, 17, 17) ,
+#     ("LOCAL", "이민규", "이민규", "test28@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 18, 18, 18) ,
+#     ("LOCAL", "정민채", "정민채", "test29@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 19, 19, 19) ,
+#     ("LOCAL", "정화영", "정화영", "test30@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 20, 20, 20),
+#
+#
+#     ("LOCAL", "박상훈", "박상훈", "test31@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 21, 21, 21),
+#     ("LOCAL", "김건식", "김건식", "test32@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 22, 22, 22),
+#     ("LOCAL", "이혜란", "이혜란", "test33@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 23, 23, 23) ,
+#     ("LOCAL", "홍혜란", "홍혜란", "test34@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 24, 24, 24) ,
+#     ("LOCAL", "황혜란", "황혜란", "test35@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 25,25, 25) ,
+#     ("LOCAL", "지성민", "지성민", "test36@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 26, 26, 26) ,
+#     ("LOCAL", "이재균", "이재균", "test37@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 27, 27, 27) ,
+#     ("LOCAL", "이민정", "이민정", "test38@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 28, 28, 28) ,
+#     ("LOCAL", "김민정", "김민정", "test39@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 29, 29, 29) ,
+#     ("LOCAL", "정채원", "정채원", "test40@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 30,30, 30),
+#
+#
+#     ("LOCAL", "원혜윤", "원혜윤", "test41@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 31, 31, 31),
+#     ("LOCAL", "김시우", "김시우", "test42@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 32, 32, 32),
+#     ("LOCAL", "이시우", "이시우", "test43@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 33, 33, 33) ,
+#     ("LOCAL", "김정우", "김정우", "test44@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 34, 34, 34) ,
+#     ("LOCAL", "김정호", "김정호", "test45@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 35, 35, 35) ,
+#     ("LOCAL", "복민정", "복민정", "test46@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 36, 36, 36) ,
+#     ("LOCAL", "문채원", "문채원", "test47@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 37, 37, 37) ,
+#     ("LOCAL", "곽원기", "곽원기", "test48@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 38, 38, 38) ,
+#     ("LOCAL", "이재혁", "이재혁", "test49@test.com", "chan123", "010-1234-1234", "MALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 39, 39, 39) ,
+#     ("LOCAL", "원해인", "원해인", "test50@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 40, 40, 40),
+#
+#
+#     ("LOCAL", "박하나", "박하나", "test51@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 41, 41, 41) ,
+#     ("LOCAL", "김지현", "김지현", "test52@test.com", "chan123", "010-1234-1234", "FEMALE", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 50, 50, 50)
+# ;
+#
+#
+# insert into todays_friends (member_idx, member_by_personality, member_by_relation_type, member_by_hobby) values
+#     (1, 2, 3, 4) ,
+#     (2, 1, 3, 4) ,
+#     (3, 1, 2, 4) ,
+#     (4, 1, 2, 3) ,
+#     (5, 1, 2, 3) ,
+#     (6, 2, 3, 4) ,
+#     (7, 2, 3, 4) ,
+#     (8, 2, 3, 4) ,
+#     (9, 1, 2, 3) ,
+#     (10, 1, 2, 3),
+#
+#     (11, 2, 3, 4) ,
+#     (12, 1, 3, 4) ,
+#     (13, 1, 2, 4) ,
+#     (14, 1, 2, 3) ,
+#     (15, 1, 2, 3) ,
+#     (16, 2, 3, 4) ,
+#     (17, 2, 3, 4) ,
+#     (18, 2, 3, 4) ,
+#     (19, 1, 2, 3) ,
+#     (20, 1, 2, 3),
+#
+#     (21, 2, 3, 4) ,
+#     (22, 1, 3, 4) ,
+#     (23, 1, 2, 4) ,
+#     (24, 1, 2, 3) ,
+#     (25, 1, 2, 3) ,
+#     (26, 2, 3, 4) ,
+#     (27, 2, 3, 4) ,
+#     (28, 2, 3, 4) ,
+#     (29, 1, 2, 3) ,
+#     (30, 1, 2, 3),
+#
+#     (31, 2, 3, 4) ,
+#     (32, 1, 3, 4) ,
+#     (33, 1, 2, 4) ,
+#     (34, 1, 2, 3) ,
+#     (35, 1, 2, 3) ,
+#     (36, 2, 3, 4) ,
+#     (37, 2, 3, 4) ,
+#     (38, 2, 3, 4) ,
+#     (39, 1, 2, 3) ,
+#     (40, 1, 2, 3),
+#
+#     (41, 1, 2, 3) ,
+#     (42, 1, 2, 3)
+# ;
+#
+# insert into member_image (created_at, state, updated_at, image_url, member_idx) VALUES
+#     (now(), "ACTIVE", now(), "url1", 1),
+#     (now(), "ACTIVE", now(), "url2", 2),
+#     (now(), "ACTIVE", now(), "url3", 3),
+#     (now(), "ACTIVE", now(), "url4", 4),
+#     (now(), "ACTIVE", now(), "url5", 5),
+#     (now(), "ACTIVE", now(), "url6", 6),
+#     (now(), "ACTIVE", now(), "url7", 7),
+#     (now(), "ACTIVE", now(), "url8", 8),
+#     (now(), "ACTIVE", now(), "url9", 9),
+#     (now(), "ACTIVE", now(), "url10", 10),
+#
+#     (now(), "ACTIVE", now(), "url11", 11),
+#     (now(), "ACTIVE", now(), "url12", 12),
+#     (now(), "ACTIVE", now(), "url13", 13),
+#     (now(), "ACTIVE", now(), "url14", 14),
+#     (now(), "ACTIVE", now(), "url15", 15),
+#     (now(), "ACTIVE", now(), "url16", 16),
+#     (now(), "ACTIVE", now(), "url17", 17),
+#     (now(), "ACTIVE", now(), "url18", 18),
+#     (now(), "ACTIVE", now(), "url19", 19),
+#     (now(), "ACTIVE", now(), "url20", 20),
+#
+#     (now(), "ACTIVE", now(), "url21", 21),
+#     (now(), "ACTIVE", now(), "url22", 22),
+#     (now(), "ACTIVE", now(), "url23", 23),
+#     (now(), "ACTIVE", now(), "url24", 24),
+#     (now(), "ACTIVE", now(), "url25", 25),
+#     (now(), "ACTIVE", now(), "url26", 26),
+#     (now(), "ACTIVE", now(), "url27", 27),
+#     (now(), "ACTIVE", now(), "url28", 28),
+#     (now(), "ACTIVE", now(), "url29", 29),
+#     (now(), "ACTIVE", now(), "url30", 30),
+#
+#     (now(), "ACTIVE", now(), "url31", 31),
+#     (now(), "ACTIVE", now(), "url32", 32),
+#     (now(), "ACTIVE", now(), "url33", 33),
+#     (now(), "ACTIVE", now(), "url34", 34),
+#     (now(), "ACTIVE", now(), "url35", 35),
+#     (now(), "ACTIVE", now(), "url36", 36),
+#     (now(), "ACTIVE", now(), "url37", 37),
+#     (now(), "ACTIVE", now(), "url38", 38),
+#     (now(), "ACTIVE", now(), "url39", 39),
+#     (now(), "ACTIVE", now(), "url40", 40),
+#
+#     (now(), "ACTIVE", now(), "url41", 41),
+#     (now(), "ACTIVE", now(), "url42", 42)
+# ;
