@@ -85,6 +85,7 @@ public class MemberService {
                 .email(memberSignupRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(memberSignupRequest.getPassword()))
                 .phoneNum(memberSignupRequest.getPhoneNum())
+                .gender(memberSignupRequest.getGender())
                 .job(memberSignupRequest.getJob())
                 .introduction(memberSignupRequest.getIntroduction())
                 .locationEnabled(memberSignupRequest.isLocationEnabled())
@@ -243,9 +244,6 @@ public class MemberService {
         Member member = optional.get();
         Details details = member.getDetails();
 
-        log.info("memberId: {}", member.getId());
-        log.info("request job : {}" , memberProfileInfoRequest.getJob());
-        log.info("request marital status : {}" , memberProfileInfoRequest.getMaritalStatus());
 
         try {
             member.setJob(memberProfileInfoRequest.getJob());

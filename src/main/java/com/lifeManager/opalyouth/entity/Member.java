@@ -38,6 +38,9 @@ public class Member extends BaseEntity {
     @Column(name = "phoneNum", nullable = false)
     private String phoneNum;
 
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
     @Column(name = "job", length = 25)
     private String job;
 
@@ -115,13 +118,14 @@ public class Member extends BaseEntity {
     private item item;
 
     @Builder
-    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item, LocalDate nicknameUpdateAt) {
+    public Member(String idWithProvider, String nickname, String memberName, String email, String password, String phoneNum, String gender, String job, String introduction, boolean locationEnabled, boolean subscriptionStatus, Details details, Birth birth, Location location, com.lifeManager.opalyouth.entity.item item, LocalDate nicknameUpdateAt) {
         this.idWithProvider = idWithProvider;
         this.nickname = nickname;
         this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
+        this.gender = gender;
         this.job = job;
         this.introduction = introduction;
         this.locationEnabled = locationEnabled;

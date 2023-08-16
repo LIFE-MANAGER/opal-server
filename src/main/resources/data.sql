@@ -40,17 +40,17 @@ insert into member_location (created_at, state, updated_at, location) VALUES
 ;
 
 
-insert into member (id_with_provider, nickname, member_name, email, password, phone_num, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
-    ("LOCAL", "chann", "LeeDongChan", "ldc0000@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 1, 1, 1),
-    ("LOCAL", "minjung", "BokMinJung", "min1111@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 2, 2, 2),
-    ("KAKAO_12341423", "kakaoUser", "CHAN", "ldc1222@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 3, 3, 3) ,
-    ("LOCAL", "user1", "USER1", "ldc1111@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 4, 4, 4) ,
-    ("LOCAL", "user2", "USER2", "ldc2222@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 5, 5, 5) ,
-    ("LOCAL", "user3", "USER3", "ldc3333@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 6, 6, 6) ,
-    ("LOCAL", "user4", "USER4", "ldc4444@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 7, 7, 7) ,
-    ("LOCAL", "user5", "USER5", "ldc5555@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 8, 8, 8) ,
-    ("LOCAL", "user6", "USER6", "ldc6666@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 9, 9, 9) ,
-    ("LOCAL", "user7", "USER7", "ldc7777@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 10, 10, 10)
+insert into member (id_with_provider, nickname, member_name, email, password, phone_num, gender, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
+    ("LOCAL", "chann", "LeeDongChan", "ldc0000@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 1, 1, 1),
+    ("LOCAL", "minjung", "BokMinJung", "min1111@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 2, 2, 2),
+    ("KAKAO_12341423", "kakaoUser", "CHAN", "ldc1222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 3, 3, 3) ,
+    ("LOCAL", "user1", "USER1", "ldc1111@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 4, 4, 4) ,
+    ("LOCAL", "user2", "USER2", "ldc2222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 5, 5, 5) ,
+    ("LOCAL", "user3", "USER3", "ldc3333@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 6, 6, 6) ,
+    ("LOCAL", "user4", "USER4", "ldc4444@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 7, 7, 7) ,
+    ("LOCAL", "user5", "USER5", "ldc5555@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 8, 8, 8) ,
+    ("LOCAL", "user6", "USER6", "ldc6666@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 9, 9, 9) ,
+    ("LOCAL", "user7", "USER7", "ldc7777@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 10, 10, 10)
 ;
 
 
@@ -122,17 +122,17 @@ insert into member_location (created_at, state, updated_at, location) VALUES
 ;
 
 
-insert into member (id_with_provider, nickname, member_name, email, password, phone_num, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
-    ("LOCAL", "chann", "LeeDongChan2", "ldc00002@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 11, 11, 11),
-    ("LOCAL", "minjung", "BokMinJung2", "min11112@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 12, 12, 12),
-    ("KAKAO_12341423", "kakaoUser2", "CHAN", "ldc12222@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 13, 13, 13) ,
-    ("LOCAL", "user1", "USER11", "ldc11112@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 14, 14, 14) ,
-    ("LOCAL", "user2", "USER12", "ldc22222@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 15, 15, 15) ,
-    ("LOCAL", "user3", "USER13", "ldc33332@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 16, 16, 16) ,
-    ("LOCAL", "user4", "USER14", "ldc44442@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 17, 17, 17) ,
-    ("LOCAL", "user5", "USER15", "ldc55552@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 18, 18, 18) ,
-    ("LOCAL", "user6", "USER16", "ldc66662@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 19, 19, 19) ,
-    ("LOCAL", "user7", "USER17", "ldc77772@naver.com", "chan123", "010-1234-1234", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 20, 20, 20)
+insert into member (id_with_provider, nickname, member_name, email, password, phone_num, gender, job, introduction, location_yn, subscribe, nickname_update_at, created_at, updated_at, state, member_details_idx, member_birth_idx, member_location_idx) values
+    ("LOCAL", "chann", "LeeDongChan2", "ldc00002@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 11, 11, 11),
+    ("LOCAL", "minjung", "BokMinJung2", "min11112@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 12, 12, 12),
+    ("KAKAO_12341423", "kakaoUser2", "CHAN", "ldc12222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 13, 13, 13) ,
+    ("LOCAL", "user1", "USER11", "ldc11112@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 14, 14, 14) ,
+    ("LOCAL", "user2", "USER12", "ldc22222@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 15, 15, 15) ,
+    ("LOCAL", "user3", "USER13", "ldc33332@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 16, 16, 16) ,
+    ("LOCAL", "user4", "USER14", "ldc44442@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 17, 17, 17) ,
+    ("LOCAL", "user5", "USER15", "ldc55552@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 18, 18, 18) ,
+    ("LOCAL", "user6", "USER16", "ldc66662@naver.com", "chan123", "010-1234-1234", "male", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 19, 19, 19) ,
+    ("LOCAL", "user7", "USER17", "ldc77772@naver.com", "chan123", "010-1234-1234", "female", "job", "introduction", true, true, now(), now(), now(), "ACTIVE", 20, 20, 20)
 ;
 
 
