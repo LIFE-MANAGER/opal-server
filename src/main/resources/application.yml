@@ -1,17 +1,17 @@
 spring:
   ## LOCAL DB
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: opal_user
-    url: jdbc:mysql://localhost:3306/opal_db?characterEncoding=UTF-8&serverTimezone=UTC
-    password: opalDbPw1@
-
-    ## RDS DB
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username: ${AWS_RDS_USERNAME}
-#    url: ${AWS_RDS_URL}
-#    password: ${AWS_RDS_PASSWORD}
+#    username: opal_user
+#    url: jdbc:mysql://localhost:3306/opal_db?characterEncoding=UTF-8&serverTimezone=UTC
+#    password: opalDbPw1@
+
+    ## RDS DB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${AWS_RDS_USERNAME}
+    url: ${AWS_RDS_URL}
+    password: ${AWS_RDS_PASSWORD}
 
   jpa:
     defer-datasource-initialization: true
