@@ -59,7 +59,7 @@ public class OAuth2Utils {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", AUTHORIZATION_CODE_GRANT_TYPE);
         params.add("client_id", KAKAO_CLIENT_ID);
-        params.add("redirect_uri", "http://localhost:8080/login/oauth2/code/kakao");
+        params.add("redirect_uri", "http://118.67.143.157:8080/login/oauth2/code/kakao");
         params.add("code", code);
         params.add("client_secret", KAKAO_CLIENT_SECRET);
 
