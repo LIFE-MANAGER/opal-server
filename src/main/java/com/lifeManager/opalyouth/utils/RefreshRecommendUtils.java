@@ -64,14 +64,6 @@ public class RefreshRecommendUtils {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void scheduledExecute() {
-        try {
-            execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void execute() throws Exception {
         log.info("execute start");
@@ -88,27 +80,48 @@ public class RefreshRecommendUtils {
 
     private void updateTodayFriend(TodaysFriends todaysFriends) throws Exception {
         Member recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+        int repeat = 0;
         while (Objects.equals(recommendByPersonality.getId(), todaysFriends.getId())) {
             recommendByPersonality = createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+
+            repeat += 1;
+            if (repeat > 20) {
+                recommendByPersonality = null;
+                break;
+            }
         }
 
 
         Member recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
+        repeat = 0;
         while (
                 Objects.equals(recommendByRelationType.getId(), todaysFriends.getId())
                 || Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
         ) {
             recommendByRelationType = createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
+
+            repeat += 1;
+            if (repeat > 20) {
+                recommendByPersonality = null;
+                break;
+            }
         }
 
 
         Member recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
+        repeat = 0;
         while (
                 Objects.equals(recommendByHobby.getId(), todaysFriends.getId())
                         || Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
                         || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
         ) {
             recommendByHobby = createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
+
+            repeat += 1;
+            if (repeat > 20) {
+                recommendByPersonality = null;
+                break;
+            }
         }
 
         todaysFriends.updateRecommends(

@@ -4,12 +4,10 @@ import com.lifeManager.opalyouth.common.exception.BaseException;
 import com.lifeManager.opalyouth.common.response.BaseResponse;
 import com.lifeManager.opalyouth.dto.friends.BriefFriendsInfoResponse;
 import com.lifeManager.opalyouth.dto.friends.DetailFriendsInfoResponse;
+import com.lifeManager.opalyouth.dto.member.request.FriendsConditionRequest;
 import com.lifeManager.opalyouth.service.FriendsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -56,6 +54,26 @@ public class FriendsController {
         try {
             List<BriefFriendsInfoResponse> recommendFriendsResponseList = friendsService.recommendByRelationType(principal);
             return new BaseResponse<>(recommendFriendsResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @GetMapping("/distance")
+    public BaseResponse<List<BriefFriendsInfoResponse>> recommendByDistance(Principal principal, @RequestParam int distance) {
+        try {
+            List<BriefFriendsInfoResponse> recommendFriendsResponseList = friendsService.recommendByDistance(principal, distance);
+            return new BaseResponse<>(recommendFriendsResponseList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @GetMapping("/condition")
+    public BaseResponse<List<BriefFriendsInfoResponse>> recommendByCondition(Principal principal, @RequestBody FriendsConditionRequest friendsConditionRequest) {
+        try {
+            List<BriefFriendsInfoResponse> briefFriendsInfoResponseList = friendsService.recommendByCondition(principal, friendsConditionRequest);
+            return new BaseResponse<>(briefFriendsInfoResponseList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

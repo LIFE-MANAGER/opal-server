@@ -104,7 +104,7 @@ public class MemberService {
                                 .build()
                 )
                 .location(
-                        new Location(memberSignupRequest.getLatitude(), memberSignupRequest.getLongitude())
+                        new Location(memberSignupRequest.getLongitude(), memberSignupRequest.getLatitude())
                 )
                 .subscriptionStatus(false)
                 .nicknameUpdateAt(LocalDate.now())
@@ -123,19 +123,34 @@ public class MemberService {
             Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(memberEntity.getDetails().getPersonality());
 
             Member recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+            int repeat = 0;
             while (
                     Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
             ) {
                 recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(memberEntity.getDetails().getRelationType());
+                repeat += 1;
+
+                if (repeat > 20) {
+                    recommendByRelationType = null;
+                    break;
+                }
             }
 
 
             Member recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+            repeat = 0;
             while (
                     Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
                             || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
             ) {
                 recommendByHobby = refreshRecommendUtils.createRecommendByHobby(memberEntity.getDetails().getHobby());
+
+                repeat += 1;
+
+                if (repeat > 20) {
+                    recommendByHobby = null;
+                    break;
+                }
             }
 
             todaysFriends = new TodaysFriends(memberEntity, recommendByPersonality, recommendByRelationType, recommendByHobby);
@@ -559,7 +574,6 @@ public class MemberService {
         List<LikeFriendsPageResponse> likeFriendsPageResponseList = likeEntityList.stream()
                 .map(LikeFriendsPageResponse::LikeFriendEntityToLikeRes)
                 .collect(Collectors.toList());
-
 
         if (likeEntityList.isEmpty()) {
             return Collections.emptyList();
