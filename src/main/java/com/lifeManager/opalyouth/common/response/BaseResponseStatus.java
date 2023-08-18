@@ -29,6 +29,7 @@ public enum BaseResponseStatus {
     ALREADY_REQUESTED(false, HttpStatus.CONFLICT.value(), "이미 친구 요청을 보냈습니다."),
     EXIST_CHAT_ROOM(false, HttpStatus.CONFLICT.value(), "이미 존재하는 채팅방입니다."),
     NON_EXIST_CHAT_ROOM(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 채팅방입니다."),
+    NO_DIAMONDS(false, HttpStatus.BAD_REQUEST.value(), "다이아가 부족합니다."),
 
     /**
      * Server Error - 5xx 에러
