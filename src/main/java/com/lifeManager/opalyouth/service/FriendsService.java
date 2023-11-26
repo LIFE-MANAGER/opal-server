@@ -26,8 +26,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.INIT_TODAY_FRIENDS_ERROR;
-import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.NON_EXIST_USER;
+import static com.lifeManager.opalyouth.common.response.BaseResponseStatus.*;
 
 @RequiredArgsConstructor
 @Transactional
@@ -45,6 +44,11 @@ public class FriendsService {
     public void refreshFriends(Principal principal) {
         Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NON_EXIST_USER));
+
+        int diamonds = member.getDetails().getDiamonds();
+        if (diamonds < 2) {
+            throw new BaseException(NO_DIAMONDS);
+        }
 
         Optional<TodaysFriends> optionalTodaysFriends = todaysFriendsRepository.findByMember(member);
 
@@ -84,6 +88,8 @@ public class FriendsService {
             ) {
                 recommendByHobby = refreshRecommendUtils.createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
             }
+
+            member.getDetails().setDiamonds(diamonds - 2);
 
             todaysFriends.updateRecommends(
                     recommendByPersonality,
@@ -206,6 +212,11 @@ public class FriendsService {
         Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
                 .orElseThrow(()-> new BaseException(NON_EXIST_USER));
 
+        int diamonds = member.getDetails().getDiamonds();
+        if (diamonds < 2) {
+            throw new BaseException(NO_DIAMONDS);
+        }
+
         List<Member> memberList = memberRepository.findAll();
         List<Member> targetMembers = memberList.stream()
                 .filter(target -> target.getGender().equals(friendsConditionRequest.getGender()))
@@ -226,6 +237,9 @@ public class FriendsService {
         if (briefFriendsInfoResponseList.isEmpty()) {
             return Collections.emptyList();
         }
+
+        member.getDetails().setDiamonds(diamonds - 2);
+
         return briefFriendsInfoResponseList;
     }
 }

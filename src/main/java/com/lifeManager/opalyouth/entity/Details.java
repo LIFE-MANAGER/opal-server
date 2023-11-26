@@ -34,6 +34,9 @@ public class Details extends BaseEntity {
     @Column(name = "hobby", length = 20)
     private String hobby;
 
+    @Column(name = "diamonds")
+    private int diamonds = 20;
+
     @Builder
     public Details(String relationType, MaritalStatus maritalStatus, boolean hasChildren, String personality, String hobby) {
         this.relationType = relationType;
