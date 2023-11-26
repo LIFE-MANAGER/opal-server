@@ -80,7 +80,7 @@ cloud:
       region:
         static: ap-northeast-2
       s3:
-        endpoint: https://kr.object.ncloudstorage.com
+#        endpoint: https://kr.object.ncloudstorage.com
         bucket: ${NAVER_CLOUD_BUCKET_NAME}
 
 naver-cloud-sms:
