@@ -18,15 +18,16 @@ public class S3Config {
     private String secretKey;
     @Value("${cloud.aws.region.static}")
     private String region;
-    @Value("${cloud.aws.s3.endpoint}")
-    private String endPoint;
+//    @Value("${cloud.aws.s3.endpoint}")
+//    private String endPoint;
 
     @Bean
     public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey,secretKey);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+                .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, region))
+//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, region))
                 .build();
     }
 }
