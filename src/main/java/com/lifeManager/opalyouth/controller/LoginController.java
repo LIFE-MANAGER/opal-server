@@ -35,8 +35,8 @@ public class LoginController {
             return new BaseResponse<>(false, 400, message);
         }
         try {
-            loginService.localLogin(loginRequest, response);
-            return new BaseResponse<>("로그인에 성공하였습니다.");
+            String accessToken = loginService.localLogin(loginRequest, response);
+            return new BaseResponse<>(accessToken);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
