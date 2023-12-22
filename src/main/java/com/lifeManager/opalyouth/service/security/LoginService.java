@@ -44,7 +44,7 @@ public class LoginService {
     private static final String NAVER_ID_WITH_PRINCIPAL_PREFIX = "NAVER_";
 
 
-    public void localLogin(LoginRequest loginRequest, HttpServletResponse response) {
+    public String localLogin(LoginRequest loginRequest, HttpServletResponse response) {
         log.info("loginRequest : {}", loginRequest.getEmail());
         Member member = memberRepository.findByEmailAndState(loginRequest.getEmail(), BaseEntity.State.ACTIVE)
                 .orElseThrow(() -> new BaseException(NON_EXIST_USER));
@@ -62,6 +62,7 @@ public class LoginService {
         refreshCookie.setMaxAge((int) REFRESH_TOKEN_EXPIRE_TIME); // 쿠키의 만료시간 설정
         refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
+        return tokens.get("accessToken");
     }
 
 
