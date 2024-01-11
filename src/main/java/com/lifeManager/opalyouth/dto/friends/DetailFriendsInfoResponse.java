@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DetailFriendsInfoResponse {
+    private Long userId;
+    private String imageUrl;
     private String nickname;
     private String job;
     private String maritalStatus;
@@ -22,7 +24,9 @@ public class DetailFriendsInfoResponse {
     public DetailFriendsInfoResponse() {
     }
 
-    public DetailFriendsInfoResponse(String nickname, String job, String maritalStatus, boolean hasChildren, String personality, String hobby, String relationType, String introduction, Double latitude, Double longitude) {
+    public DetailFriendsInfoResponse(Long userId, String imgUrl, String nickname, String job, String maritalStatus, boolean hasChildren, String personality, String hobby, String relationType, String introduction, Double latitude, Double longitude) {
+        this.userId = userId;
+        this.imageUrl = imgUrl;
         this.nickname = nickname;
         this.job = job;
         this.maritalStatus = maritalStatus;
@@ -37,6 +41,8 @@ public class DetailFriendsInfoResponse {
 
     public static DetailFriendsInfoResponse entityToDetailFriendInfoDto(Member member) {
         return new DetailFriendsInfoResponse(
+                member.getId(),
+                member.getImage().getUrl(),
                 member.getNickname(),
                 member.getJob(),
                 member.getDetails().getMaritalStatus().toString(),

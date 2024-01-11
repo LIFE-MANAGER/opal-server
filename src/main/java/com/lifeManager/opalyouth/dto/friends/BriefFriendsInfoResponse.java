@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class BriefFriendsInfoResponse {
+    private Long userId;
     private String imageUrl;
     private String nickname;
     private LocalDate birth;
@@ -24,7 +25,8 @@ public class BriefFriendsInfoResponse {
     public BriefFriendsInfoResponse() {
     }
 
-    public BriefFriendsInfoResponse(String imageUrl, String nickname, LocalDate birth, Double latitude, Double longitude, String personality, String hobby, String relationType) {
+    public BriefFriendsInfoResponse(Long userId, String imageUrl, String nickname, LocalDate birth, Double latitude, Double longitude, String personality, String hobby, String relationType) {
+        this.userId = userId;
         this.imageUrl = imageUrl;
         this.nickname = nickname;
         this.birth = birth;
@@ -37,6 +39,7 @@ public class BriefFriendsInfoResponse {
 
     public static BriefFriendsInfoResponse entityToBriefFriendInfoDto(Member member) {
         return new BriefFriendsInfoResponse(
+                member.getId(),
                 member.getImage().getUrl(),
                 member.getNickname(),
                 member.getBirth().getBirth(),
@@ -50,6 +53,7 @@ public class BriefFriendsInfoResponse {
 
     public static BriefFriendsInfoResponse entityToBriefFriendInfoDto(Details details) {
         return new BriefFriendsInfoResponse(
+                details.getMember().getId(),
                 details.getMember().getImage().getUrl(),
                 details.getMember().getNickname(),
                 details.getMember().getBirth().getBirth(),
