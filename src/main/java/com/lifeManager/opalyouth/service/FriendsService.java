@@ -10,10 +10,7 @@ import com.lifeManager.opalyouth.entity.Details;
 import com.lifeManager.opalyouth.entity.Location;
 import com.lifeManager.opalyouth.entity.Member;
 import com.lifeManager.opalyouth.entity.TodaysFriends;
-import com.lifeManager.opalyouth.repository.DetailsRepository;
-import com.lifeManager.opalyouth.repository.LocationRepository;
-import com.lifeManager.opalyouth.repository.MemberRepository;
-import com.lifeManager.opalyouth.repository.TodaysFriendsRepository;
+import com.lifeManager.opalyouth.repository.*;
 import com.lifeManager.opalyouth.utils.RefreshRecommendUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +37,7 @@ public class FriendsService {
     private final DetailsRepository detailsRepository;
 
     private final LocationRepository locationRepository;
+    private final LikeRepository likeRepository;
 
     public void refreshFriends(Principal principal) {
         Member member = memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
@@ -161,11 +159,15 @@ public class FriendsService {
     }
 
     @Transactional(readOnly = true)
-    public DetailFriendsInfoResponse getMemberDetails(String nickname) {
+    public DetailFriendsInfoResponse getMemberDetails(Principal principal, String nickname) {
         Member member = memberRepository.findByNicknameAndState(nickname, BaseEntity.State.ACTIVE)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NON_EXIST_USER));
-
-        return DetailFriendsInfoResponse.entityToDetailFriendInfoDto(member);
+        Member me =  memberRepository.findByEmailAndState(principal.getName(), BaseEntity.State.ACTIVE)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NON_EXIST_USER));
+        return DetailFriendsInfoResponse.entityToDetailFriendInfoDto(member, isLiked(me, member));
+    }
+    private boolean isLiked(Member me, Member other){
+        return likeRepository.findByMemberAndLikedMember(me, other).isPresent();
     }
 
 
