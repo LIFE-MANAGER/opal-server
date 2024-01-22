@@ -20,6 +20,7 @@ public class DetailFriendsInfoResponse {
     private String introduction;    // 자기소개
     private Double latitude;
     private Double longitude;
+    private boolean isLiked;
 
     public DetailFriendsInfoResponse() {
     }
@@ -53,6 +54,38 @@ public class DetailFriendsInfoResponse {
                 member.getIntroduction(),
                 member.getLocation().getLatitude(),
                 member.getLocation().getLongitude()
+        );
+    }
+    public DetailFriendsInfoResponse(Long userId, String imgUrl, String nickname, String job, String maritalStatus, boolean hasChildren, String personality, String hobby, String relationType, String introduction, Double latitude, Double longitude, boolean isLiked) {
+        this.userId = userId;
+        this.imageUrl = imgUrl;
+        this.nickname = nickname;
+        this.job = job;
+        this.maritalStatus = maritalStatus;
+        this.hasChildren = hasChildren;
+        this.personality = personality;
+        this.hobby = hobby;
+        this.relationType = relationType;
+        this.introduction = introduction;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.isLiked = isLiked;
+    }
+    public static DetailFriendsInfoResponse entityToDetailFriendInfoDto(Member member, boolean isLiked) {
+        return new DetailFriendsInfoResponse(
+                member.getId(),
+                member.getImage().getUrl(),
+                member.getNickname(),
+                member.getJob(),
+                member.getDetails().getMaritalStatus().toString(),
+                member.getDetails().isHasChildren(),
+                member.getDetails().getPersonality(),
+                member.getDetails().getHobby(),
+                member.getDetails().getRelationType(),
+                member.getIntroduction(),
+                member.getLocation().getLatitude(),
+                member.getLocation().getLongitude(),
+                isLiked
         );
     }
 }
