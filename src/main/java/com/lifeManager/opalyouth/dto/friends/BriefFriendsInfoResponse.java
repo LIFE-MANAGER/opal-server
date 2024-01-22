@@ -20,6 +20,7 @@ public class BriefFriendsInfoResponse {
     private String personality;
     private String hobby;
     private String relationType;
+    private boolean isLiked;
 
 
     public BriefFriendsInfoResponse() {
