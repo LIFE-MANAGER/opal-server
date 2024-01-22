@@ -30,6 +30,7 @@ public enum BaseResponseStatus {
     EXIST_CHAT_ROOM(false, HttpStatus.CONFLICT.value(), "이미 존재하는 채팅방입니다."),
     NON_EXIST_CHAT_ROOM(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 채팅방입니다."),
     NO_DIAMONDS(false, HttpStatus.BAD_REQUEST.value(), "다이아가 부족합니다."),
+    NO_RECOMMENDED_FRIENDS(false, HttpStatus.NO_CONTENT.value(), "취향에 맞는 친구가 없습니다."),
 
     /**
      * Server Error - 5xx 에러
