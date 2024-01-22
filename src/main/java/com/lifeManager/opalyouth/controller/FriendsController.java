@@ -42,7 +42,7 @@ public class FriendsController {
     @GetMapping("/details")
     public BaseResponse<DetailFriendsInfoResponse> getMemberDetails(Principal principal, @RequestParam String nickname) {
         try {
-            DetailFriendsInfoResponse memberDetails = friendsService.getMemberDetails(nickname);
+            DetailFriendsInfoResponse memberDetails = friendsService.getMemberDetails(principal, nickname);
             return new BaseResponse<>(memberDetails);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
