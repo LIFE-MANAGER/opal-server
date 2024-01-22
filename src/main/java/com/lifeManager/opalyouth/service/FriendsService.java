@@ -65,29 +65,59 @@ public class FriendsService {
         } else {
             todaysFriends = optionalTodaysFriends.get();
 
+            boolean changePersonality = true;
+            boolean changeRelationType = true;
+            boolean changeHobby = true;
+
             Member recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
-            while (Objects.equals(recommendByPersonality.getId(), todaysFriends.getId())) {
+            int cnt = 0;
+            while (recommendByPersonality != null && Objects.equals(recommendByPersonality.getId(), todaysFriends.getId())) {
+                if (cnt > 10) {
+                    changePersonality = false;
+                    break;
+                }
                 recommendByPersonality = refreshRecommendUtils.createRecommendByPersonality(todaysFriends.getMember().getDetails().getPersonality());
+                cnt++;
             }
 
 
             Member recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
-            while (
-                    Objects.equals(recommendByRelationType.getId(), todaysFriends.getId())
-                            || Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId())
+            cnt = 0;
+            while (recommendByRelationType != null &&
+                    (Objects.equals(recommendByRelationType.getId(), todaysFriends.getId())
+                            || Objects.equals(recommendByRelationType.getId(), recommendByPersonality.getId()))
             ) {
+                if (cnt > 10) {
+                    changeRelationType = false;
+                    break;
+                }
                 recommendByRelationType = refreshRecommendUtils.createRecommendByRelationType(todaysFriends.getMember().getDetails().getRelationType());
+                cnt++;
             }
 
 
             Member recommendByHobby = refreshRecommendUtils.createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
-            while (
-                    Objects.equals(recommendByHobby.getId(), todaysFriends.getId())
+            cnt = 0;
+            while (recommendByHobby != null &&
+                    (Objects.equals(recommendByHobby.getId(), todaysFriends.getId())
                             || Objects.equals(recommendByHobby.getId(), recommendByRelationType.getId())
-                            || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId())
+                            || Objects.equals(recommendByHobby.getId(), recommendByPersonality.getId()))
             ) {
+                if (cnt > 10) {
+                    changeHobby = false;
+                    break;
+                }
                 recommendByHobby = refreshRecommendUtils.createRecommendByHobby(todaysFriends.getMember().getDetails().getHobby());
+                cnt++;
             }
+
+            if (!changePersonality
+                    || !changeRelationType
+                    || changeHobby
+                    || recommendByPersonality == null
+                    || recommendByRelationType == null
+                    || recommendByHobby == null)
+                throw new BaseException(NO_RECOMMENDED_FRIENDS);
 
             member.getDetails().setDiamonds(diamonds - 2);
 
@@ -119,9 +149,13 @@ public class FriendsService {
         Member memberByHobby = todaysFriends.getMemberByHobby();
 
         List<BriefFriendsInfoResponse> briefFriendsInfoResponseList = new ArrayList<>();
-        briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByPersonality));
-        briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByRelationType));
-        briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByHobby));
+        try {
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByPersonality));
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByRelationType));
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByHobby));
+        } catch (NullPointerException e) {
+            throw new BaseException(NO_RECOMMENDED_FRIENDS);
+        }
 
         return briefFriendsInfoResponseList;
     }
