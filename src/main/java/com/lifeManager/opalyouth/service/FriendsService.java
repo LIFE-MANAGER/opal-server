@@ -191,6 +191,9 @@ public class FriendsService {
                 .orElseThrow(()-> new BaseException(NON_EXIST_USER));
         Point point = member.getLocation().getPoint();
 
+        log.info("[POINT-X]: {}", point.getX());
+        log.info("[POINT-Y]: {}", point.getY());
+
         List<Location> getLocationByDistance = locationRepository.findLocationsWithinDistance(point, distance);
         getLocationByDistance.removeIf(location -> location.getMember().equals(member));
         Collections.shuffle(getLocationByDistance);
