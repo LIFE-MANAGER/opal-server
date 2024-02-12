@@ -29,15 +29,12 @@ public class RefreshRecommendUtils {
     private final DetailsRepository detailsRepository;
 
     public Member createRecommendByPersonality (String personality) {
-        log.info("create Recommend By Personaltiy : {}", personality);
         List<Details> byPersonality = detailsRepository.findByPersonality(personality);
         if (byPersonality.isEmpty()) {
             return null;
         } else {
             Random random = new Random(System.nanoTime());
             int idx = random.nextInt(byPersonality.size());
-            log.info("byP size : {}", byPersonality.size());
-            log.info("create Recommend By Personaltiy Idx : {}", idx);
             return byPersonality.get(idx).getMember();
         }
     }
@@ -66,7 +63,6 @@ public class RefreshRecommendUtils {
 
 
     public void execute() throws Exception {
-        log.info("execute start");
         final List<TodaysFriends> todaysFriendsList = todaysFriendsRepository.findAll();
 
         for (TodaysFriends todaysFriends : todaysFriendsList) {
