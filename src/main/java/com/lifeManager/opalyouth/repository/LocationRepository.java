@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
-    @Query("SELECT l FROM Location l WHERE FUNCTION('ST_Distance_Sphere', l.point, ST_Transform(:point, 4326)) <= :distance * 1000")
+    @Query("SELECT l FROM Location l WHERE FUNCTION('ST_Distance_Sphere', ST_Transform(l.point, 4326), ST_Transform(:point, 4326)) <= :distance * 1000")
     List<Location> findLocationsWithinDistance(@Param("point") Point point, @Param("distance") Integer distance);
 }
