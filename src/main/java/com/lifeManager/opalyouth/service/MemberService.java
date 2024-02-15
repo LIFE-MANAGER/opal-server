@@ -104,7 +104,7 @@ public class MemberService {
                                 .build()
                 )
                 .location(
-                        new Location(memberSignupRequest.getLongitude(), memberSignupRequest.getLatitude())
+                        new Location(memberSignupRequest.getLatitude(), memberSignupRequest.getLongitude())
                 )
                 .subscriptionStatus(false)
                 .nicknameUpdateAt(LocalDate.now())

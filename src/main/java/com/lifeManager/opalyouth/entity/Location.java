@@ -22,31 +22,28 @@ public class Location extends BaseEntity {
     private Long id;
 
     @JsonBackReference
-    @Column(name = "location")
+    @Column(name = "location", columnDefinition = "POINT SRID 4326")
     private Point point;
 
     @OneToOne(mappedBy = "location")
     private Member member;
 
     @Builder
-    public Location(Double longitude, Double latitude) {
-        this.point = createPoint(longitude, latitude);
+    public Location(Double latitude, Double longitude) {
+        this.point = createPoint(latitude, longitude);
     }
 
-    public static Point createPoint(double x, double y) {
+    public static Point createPoint(double latitude, double longitude) {
         GeometryFactory geometryFactory = new GeometryFactory(
                 new PrecisionModel(), 4326
         );
-        return geometryFactory.createPoint(new Coordinate(x, y));
+        return geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
 
-    public Double getLongitude() {
-        return this.point.getX();
-    }
+    public Double getLatitude() { return this.point.getY(); }
 
-    public Double getLatitude() {
-        return this.point.getY();
-    }
+    public Double getLongitude() { return this.point.getX(); }
+
 
     public static Double getDistance(Point point1, Point point2) {
         double distance = point1.distance(point2);
