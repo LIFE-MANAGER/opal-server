@@ -148,9 +148,9 @@ public class FriendsService {
 
         List<BriefFriendsInfoResponse> briefFriendsInfoResponseList = new ArrayList<>();
         try {
-            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByPersonality));
-            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByRelationType));
-            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByHobby));
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByPersonality, member));
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByRelationType, member));
+            briefFriendsInfoResponseList.add(BriefFriendsInfoResponse.entityToBriefFriendInfoDto(memberByHobby, member));
         } catch (NullPointerException e) {
             throw new BaseException(NO_RECOMMENDED_FRIENDS);
         }
