@@ -163,4 +163,12 @@ public class Member extends BaseEntity {
     public void addLikedMember(Like like) {
         this.likeList.add(like);
     }
+
+    public void setInActive(){
+        this.state = State.INACTIVE;
+    }
+
+    public void setActive(){
+        this.state = State.ACTIVE;
+    }
 }
