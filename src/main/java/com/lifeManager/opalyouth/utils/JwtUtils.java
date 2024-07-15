@@ -27,12 +27,6 @@ import static com.lifeManager.opalyouth.common.properties.JwtProperties.REFRESH_
 @Component
 public class JwtUtils {
 
-
-    // todo : jwt secret key 가릴 방법 탐
-//    @Value("${jwt.secret}")
-//    private static String JWT_SECRET;
-
-//    private static final Key JWT_KEY = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
     private final Key key;
 
     public JwtUtils(@Value("${jwt.secret}") String jwtSecret) {
