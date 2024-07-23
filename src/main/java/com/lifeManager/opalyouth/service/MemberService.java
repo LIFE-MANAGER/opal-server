@@ -224,7 +224,7 @@ public class MemberService {
         // 닉네임 수정 기간 확인
         LocalDate lastUpdate = member.getNicknameUpdateAt();
         log.info("[MEMBERSERVICE] : lastUpdate = {}", lastUpdate);
-        Period between = Period.between(LocalDate.now(), lastUpdate);
+        Period between = Period.between(lastUpdate, LocalDate.now());
         int amount = between.getDays();
         log.info("[MEMBERSERVICE] : amout = {}", amount);
 
